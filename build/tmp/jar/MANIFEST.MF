@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest
+Class-Path: libs/lwjgl.jar libs/slick.jar
+

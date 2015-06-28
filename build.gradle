@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories { 
+	 flatDir(dirs: "$projectDir/library") 
+} 
+
+dependencies { 
+	 compile ':lwjgl:'
+	 compile ':slick:'
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest'
+		attributes 'Class-Path': 'libs/lwjgl.jar libs/slick.jar'
+	}
+}
