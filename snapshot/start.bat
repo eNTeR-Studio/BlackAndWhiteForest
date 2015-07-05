@@ -1,2 +1,2 @@
-java -jar -Djava.library.path=%cd%\Native BlackAndWhiteForest.jar
+java -jar BlackAndWhiteForest.jar
 pause

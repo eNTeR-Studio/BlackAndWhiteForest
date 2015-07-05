@@ -46,6 +46,7 @@ public class BlackAndWhiteForest extends StateBasedGame {
 		this.addState(StatePool.stateShowMaker);
 		this.addState(StatePool.stateMain);
 	}
+	
 	/**It doesn't works.
 	 * @return PI(3.14159265358979323846)*/
 	public static double calculatePI() {
