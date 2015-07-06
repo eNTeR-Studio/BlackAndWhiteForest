@@ -13,7 +13,7 @@ dependencies {
 
 jar {
 	manifest {
-		attributes 'Main-Class': 'eNTeR_studio.blackandwhiteforest.launcher.BAWFLauncher'
+		attributes 'Main-Class': 'eNTeR_studio.blackandwhiteforest.BlackAndWhiteForestLauncher'
 		attributes 'Class-Path': 'libs/lwjgl.jar libs/slick.jar libs/guava-18.0.jar'
 	}
 }

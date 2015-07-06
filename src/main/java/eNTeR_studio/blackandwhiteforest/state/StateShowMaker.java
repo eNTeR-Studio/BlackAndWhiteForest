@@ -9,7 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import eNTeR_studio.blackandwhiteforest.StatePool;
+import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest.StatePool;
 
 public class StateShowMaker extends BasicGameState {
 

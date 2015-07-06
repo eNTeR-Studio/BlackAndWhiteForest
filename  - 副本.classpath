@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="build/classes/main"/>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Jenkins/workspace/BlackAndWhiteForest/libs/lwjgl.jar" exported="true"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Jenkins/workspace/BlackAndWhiteForest/libs/slick.jar" exported="true"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Jenkins/workspace/BlackAndWhiteForest/libs/guava-18.0.jar" exported="true"/>
+</classpath>

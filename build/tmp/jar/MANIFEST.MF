@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: eNTeR_studio.blackandwhiteforest.launcher.BAWFLauncher
-Class-Path: libs/lwjgl.jar libs/slick.jar libs/guava-18.0.jar
-

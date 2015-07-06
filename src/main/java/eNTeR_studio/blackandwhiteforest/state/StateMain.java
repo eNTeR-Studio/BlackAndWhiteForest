@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import eNTeR_studio.blackandwhiteforest.StatePool;
+import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest.StatePool;
 
 public class StateMain extends BasicGameState {
 

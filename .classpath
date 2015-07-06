@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/guava-18.0.jar"/>
 	<classpathentry kind="lib" path="libs/ibxm.jar"/>
 	<classpathentry kind="lib" path="libs/jinput.jar"/>
 	<classpathentry kind="lib" path="libs/jnlp.jar"/>
@@ -17,6 +18,5 @@
 	<classpathentry kind="lib" path="libs/slick-examples.jar"/>
 	<classpathentry kind="lib" path="libs/slick.jar"/>
 	<classpathentry kind="lib" path="libs/tinylinepp.jar"/>
-	<classpathentry kind="lib" path="libs/guava-18.0.jar"/>
-	<classpathentry kind="output" path="build/classes/main"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
