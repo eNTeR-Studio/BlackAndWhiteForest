@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: eNTeR_studio.blackandwhiteforest.BlackAndWhiteForestLaunch
+ er
+Class-Path: libs/lwjgl.jar libs/slick.jar libs/guava-18.0.jar
+

@@ -1,11 +1,15 @@
 package eNTeR_studio.blackandwhiteforest;
 
+import java.awt.Container;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Calendar;
+
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -22,11 +26,12 @@ public class BlackAndWhiteForest extends StateBasedGame {
 	public static int height = 480;
 	public static int fps = 30;
 	/** The Event Bus. You can register to it. */
-	public static final EventBus bawfEventBus = new EventBus();
-	public static final String gameName = "Black And White Forest";
+	public static final EventBus BAWF_EVENT_BUS = new EventBus();
+	public static final String GAME_NAME = "Black And White Forest";
+	public static int deltaTime1 = 6000;
 
 	public BlackAndWhiteForest() {
-		this(gameName);
+		this(GAME_NAME);
 	}
 
 	public BlackAndWhiteForest(String name) {
@@ -34,55 +39,50 @@ public class BlackAndWhiteForest extends StateBasedGame {
 	}
 
 	/**
-	 * Don't use it.<br/>
-	 * Because I can't add library here.
+	 * Don't use it. Because I can't add library here.
 	 * 
 	 * @param args
 	 *            is arguments.
 	 * @param b
 	 *            just is used to let eclipse can't run Java Applications.
+	 * @see eNTeR_studio.blackandwhiteforest.BlackAndWhiteForestLauncher
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args, boolean b) {
-		// File(BlackAndWhiteForest.class.getResource("").getFile()+"/../../../../resources/assets/fxzjshm/textures/icon/icon.png").getPath());
-		bawfEventBus.register(new BlackAndWhiteForest());
 		try {
+			// File(BlackAndWhiteForest.class.getResource("").getFile()+"/../../../../resources/assets/fxzjshm/textures/icon/icon.png").getPath());
+			System.out.println(BlackAndWhiteForest.class
+					.getResource("/assets/fxzjshm/textures/icon/icon.png"));
+			BAWF_EVENT_BUS.register(new BlackAndWhiteForest());
 			BAWFAppGameContainer app = new BAWFAppGameContainer(
 					new BlackAndWhiteForest());
 			app.setDisplayMode(width, height, false);
 			app.setTargetFrameRate(fps);
 			System.out.println("AppGameContainer is starting.");
-			bawfEventBus.post(new BAWFWillStartEvent(app));
+			BAWF_EVENT_BUS.post(new BAWFWillStartEvent(app));
 			app.start();
 			System.out.println("AppGameContainer has finished.");
-			bawfEventBus.post(new BAWFFinishedEvent(app));
+			BAWF_EVENT_BUS.post(new BAWFFinishedEvent(app));
 			System.out.println("Ready to save data.");
 			BAWFToSaveObj toSaveObj = new BAWFToSaveObj(width, height, fps);
-			bawfEventBus.post(toSaveObj);
+			BAWF_EVENT_BUS.post(toSaveObj);
 			new ObjectOutputStream(new FileOutputStream(
 					"./BlackAndWhiteForest.dat")).writeObject(toSaveObj);
+			System.out.println("Data saved.");
 		} catch (Exception allExceptions) {
 			allExceptions.printStackTrace();
 			writeCrash(allExceptions);
+			showErrDialog(allExceptions);
 		}
 	}
 
 	/**
 	 * To get system time.
 	 * 
-	 * @return Year-Month-Date-Hour-Minute-Second-Millisecond
+	 * @return Year-Month-Date_Hour.Minute.Second.Millisecond
 	 */
 	public static String getDate() {
-		Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int date = c.get(Calendar.DATE);
-		int hour = c.get(Calendar.HOUR_OF_DAY);
-		int minute = c.get(Calendar.MINUTE);
-		int second = c.get(Calendar.SECOND);
-		int millisecond = c.get(Calendar.MILLISECOND);
-		return year + "-" + month + "-" + date + "_" + hour + "." + minute
-				+ "." + second + "." + millisecond;
+		return getDate("-", "_", ".");
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class BlackAndWhiteForest extends StateBasedGame {
 	}
 
 	public static boolean writeCrash(Exception allExceptions) {
-		File file = new File("./crash-report/BAWFcrash." + getDate() + ".log");
+		File file = new File("./crash-report/BAWFCrash." + getDate() + ".log");
 		File filefolder = new File("./crash-report");
 
 		try {
@@ -138,19 +138,41 @@ public class BlackAndWhiteForest extends StateBasedGame {
 		return true;
 	}
 
-	@Override
-	public void initStatesList(GameContainer gc) throws SlickException {
-		this.addState(StatePool.stateShowMaker);
-		this.addState(StatePool.stateMain);
+	public static boolean showErrDialog(Exception exception) {
+		int x = 480;
+		int y = 360;
+		try {
+			JFrame jframe = new JFrame();
+			Container container = jframe.getContentPane();
+
+			JTextArea jtextarea = new JTextArea();
+			jtextarea.setBounds(0, 0, x, y);
+			jtextarea
+					.setText(exception.toString()
+							+ "\nMore info:/crash-reporter/BAWFCrash-xx-xx_xx.xx.xx.xx.log\nPlease send these to eNTeR-Studio.");
+			container.add(jtextarea);
+
+			jframe.setSize(x, y);
+			jframe.setVisible(true);
+		} catch (Exception newException) {
+			newException.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
-	/** This is just a "pool" to save states and id of them. */
-	public static class StatePool {
-		public static StateShowMaker stateShowMaker = new StateShowMaker();
-		public static StateMain stateMain = new StateMain();
+	@Override
+	public void initStatesList(GameContainer gc) throws SlickException {
+		this.addState(new StateWelcome());
+		this.addState(new StateMain());
+	}
 
-		public static int idStateShowMaker = stateShowMaker.hashCode();
-		public static int idStateMain = stateMain.hashCode();
+	/**
+	 * This is just a "pool" to save id of states. Please use it like : <br/>
+	 * <code>idStateMain.hashcode()</code>
+	 */
+	public static enum StateIdPool {
+		idStateWelcome, idStateMain
 	}
 
 	/** This is an object to save data. */
@@ -162,7 +184,6 @@ public class BlackAndWhiteForest extends StateBasedGame {
 		public static int fps;
 
 		private BAWFToSaveObj() {
-
 		}
 
 		public BAWFToSaveObj(int widthTo, int heightTo, int fpsTo) {

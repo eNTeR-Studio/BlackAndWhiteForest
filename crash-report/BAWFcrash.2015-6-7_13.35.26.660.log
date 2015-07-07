@@ -1,0 +1,3 @@
+java.lang.NullPointerException
+	at eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest.main(BlackAndWhiteForest.java:49)
+	at eNTeR_studio.blackandwhiteforest.BlackAndWhiteForestLauncher.main(BlackAndWhiteForestLauncher.java:21)
