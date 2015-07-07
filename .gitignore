@@ -59,5 +59,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # Snapshot
-/snapshot/*
+/snapshot/*.jar
 /bin/
+/snapshot/libs/*
