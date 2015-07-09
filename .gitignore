@@ -61,3 +61,6 @@ $RECYCLE.BIN/
 # Snapshot
 /snapshot/history/*.jar
 /bin/
+
+# crash-report
+/crash-report/*
