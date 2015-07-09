@@ -1,15 +1,18 @@
 package eNTeR_studio.blackandwhiteforest;
 
 import java.awt.Container;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.net.URLDecoder;
 import java.util.Calendar;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -20,15 +23,23 @@ import eNTeR_studio.blackandwhiteforest.event.BAWFEvent.*;
 import eNTeR_studio.blackandwhiteforest.other.BAWFAppGameContainer;
 import eNTeR_studio.blackandwhiteforest.state.*;
 
+/**
+ * The main class of the game:Black And White Forest.
+ * 
+ * @author fxzjshm
+ */
 public class BlackAndWhiteForest extends StateBasedGame {
 
 	public static int width = 640;
 	public static int height = 480;
 	public static int fps = 30;
 	/** The Event Bus. You can register to it. */
-	public static final EventBus BAWF_EVENT_BUS = new EventBus();
+	public static final EventBus BAWF_EVENT_BUS = new EventBus("The Event Bus of Black And White Forest.");
 	public static final String GAME_NAME = "Black And White Forest";
-	public static int deltaTime1 = 6000;
+	public static int stateWelcomeDeltaTime = 2000;
+	public static boolean isClosingEeceptionDialog = false;
+	public static boolean isWindowsOs = false;
+	public static File textureFolder;
 
 	public BlackAndWhiteForest() {
 		this(GAME_NAME);
@@ -42,17 +53,31 @@ public class BlackAndWhiteForest extends StateBasedGame {
 	 * Don't use it. Because I can't add library here.
 	 * 
 	 * @param args
-	 *            is arguments.
-	 * @param b
-	 *            just is used to let eclipse can't run Java Applications.
+	 *            are arguments.
+	 * @param isInEclipse
+	 *            Is this game running in eclipse?
 	 * @see eNTeR_studio.blackandwhiteforest.BlackAndWhiteForestLauncher
+	 * @see eNTeR_studio.blackandwhiteforest.BlackAndWhiteForestLauncherEclipse
 	 */
-	@SuppressWarnings("resource")
-	public static void main(String[] args, boolean b) {
+	@SuppressWarnings({ "resource", "deprecation" })
+	public static void start(String[] args, boolean isInEclipse) {
 		try {
-			// File(BlackAndWhiteForest.class.getResource("").getFile()+"/../../../../resources/assets/fxzjshm/textures/icon/icon.png").getPath());
-			System.out.println(BlackAndWhiteForest.class
-					.getResource("/assets/fxzjshm/textures/icon/icon.png"));
+			System.out
+					.println(new File(BlackAndWhiteForest.class.getResource("")
+							.getFile()).getParent()
+							+ (isWindowsOs ? "\\assets\\fxzjshm\\textures\\icon\\icon_640_480.png"
+									: "/assets/fxzjshm/textures/icon/icon_640_480.png"));
+
+			if (isInEclipse) {
+				textureFolder = new File(
+						URLDecoder.decode(BlackAndWhiteForest.class
+								.getResource("/assets/fxzjshm/textures")
+								.getFile()));
+			} else {
+				textureFolder = new File(new File("").getAbsolutePath()
+						+ (isWindowsOs ? "\\assets\\fxzjshm\\textures"
+								: "/assets/fxzjshm/textures"));
+			}
 			BAWF_EVENT_BUS.register(new BlackAndWhiteForest());
 			BAWFAppGameContainer app = new BAWFAppGameContainer(
 					new BlackAndWhiteForest());
@@ -72,7 +97,7 @@ public class BlackAndWhiteForest extends StateBasedGame {
 		} catch (Exception allExceptions) {
 			allExceptions.printStackTrace();
 			writeCrash(allExceptions);
-			showErrDialog(allExceptions);
+			showExceptionDialog(allExceptions);
 		}
 	}
 
@@ -138,27 +163,55 @@ public class BlackAndWhiteForest extends StateBasedGame {
 		return true;
 	}
 
-	public static boolean showErrDialog(Exception exception) {
+	public static boolean showExceptionDialog(Exception exception) {
 		int x = 480;
 		int y = 360;
 		try {
-			JFrame jframe = new JFrame();
+			JFrame jframe = new JFrame("Error!") {
+				public static final long serialVersionUID = 3493250771204157405L;
+
+				@Override
+				protected void processWindowEvent(WindowEvent e) {
+					if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+						isClosingEeceptionDialog = true;
+					}
+				}
+			};
 			Container container = jframe.getContentPane();
 
 			JTextArea jtextarea = new JTextArea();
 			jtextarea.setBounds(0, 0, x, y);
 			jtextarea
 					.setText(exception.toString()
-							+ "\nMore info:/crash-reporter/BAWFCrash-xx-xx_xx.xx.xx.xx.log\nPlease send these to eNTeR-Studio.");
+							+ "\nTo know more info, please see:\n/crash-reporter/BAWFCrash-xx-xx_xx.xx.xx.xx.log\nPlease send these to eNTeR-Studio.");
 			container.add(jtextarea);
 
 			jframe.setSize(x, y);
 			jframe.setVisible(true);
+			while (!isClosingEeceptionDialog) {
+			}
 		} catch (Exception newException) {
 			newException.printStackTrace();
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Let me handle the exception for you.
+	 * 
+	 * @param exception
+	 *            is the exception to handle.
+	 * @return If it is successful to handle the exception.
+	 */
+	public static boolean handleException(Exception exception,
+			boolean isAutoClose) {
+		boolean isSuccessful1 = writeCrash(exception);
+		boolean isSuccessful2 = showExceptionDialog(exception);
+		if (isAutoClose) {
+			System.exit(0);
+		}
+		return isSuccessful1 && isSuccessful2;
 	}
 
 	@Override

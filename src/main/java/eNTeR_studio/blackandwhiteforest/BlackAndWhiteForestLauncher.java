@@ -2,6 +2,11 @@ package eNTeR_studio.blackandwhiteforest;
 
 import java.io.File;
 
+/**
+ * This is the launcher of Black And White Forest.
+ * 
+ * @author fxzjshm
+ */
 public class BlackAndWhiteForestLauncher {
 	public static void main(String[] args) {
 		System.setProperty("java.library.path", "libs/natives-windows/");
@@ -11,6 +16,7 @@ public class BlackAndWhiteForestLauncher {
 		if (osName.contains("Windows")) {
 			System.setProperty("org.lwjgl.librarypath", new File(
 					"libs/natives-windows").getAbsolutePath());
+			BlackAndWhiteForest.isWindowsOs = true;
 		} else if (osName.contains("Mac")) {
 			System.setProperty("org.lwjgl.librarypath", new File(
 					"libs/natives-mac").getAbsolutePath());
@@ -18,6 +24,6 @@ public class BlackAndWhiteForestLauncher {
 			System.setProperty("org.lwjgl.librarypath", new File(
 					"libs/natives-linux").getAbsolutePath());
 		}
-		BlackAndWhiteForest.main(args, true);
+		BlackAndWhiteForest.start(args, false);
 	}
 }

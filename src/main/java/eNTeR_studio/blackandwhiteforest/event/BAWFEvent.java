@@ -14,12 +14,12 @@ public class BAWFEvent {
 
 		public AppGameContainer app;
 
-		@SuppressWarnings("unused")
 		private BAWFWillStartEvent() {
 
 		}
 
 		public BAWFWillStartEvent(AppGameContainer app) {
+			this();
 			this.app = app;
 		}
 	}

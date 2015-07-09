@@ -1,0 +1,8 @@
+java.lang.NullPointerException
+	at eNTeR_studio.blackandwhiteforest.state.StateMain.render(StateMain.java:41)
+	at org.newdawn.slick.state.StateBasedGame.render(StateBasedGame.java:199)
+	at org.newdawn.slick.GameContainer.updateAndRender(GameContainer.java:688)
+	at org.newdawn.slick.AppGameContainer.gameLoop(AppGameContainer.java:411)
+	at eNTeR_studio.blackandwhiteforest.other.BAWFAppGameContainer.start(BAWFAppGameContainer.java:20)
+	at eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest.start(BlackAndWhiteForest.java:67)
+	at eNTeR_studio.blackandwhiteforest.BlackAndWhiteForestLauncher.main(BlackAndWhiteForestLauncher.java:22)
