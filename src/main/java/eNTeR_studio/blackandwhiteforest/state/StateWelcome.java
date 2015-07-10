@@ -3,6 +3,8 @@ package eNTeR_studio.blackandwhiteforest.state;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -16,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest;
 import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest.StateIdPool;
+import eNTeR_studio.blackandwhiteforest.api.BAWFUsefulFunctions;
 import eNTeR_studio.blackandwhiteforest.event.BAWFEvent.*;
 
 public class StateWelcome extends BasicGameState {
@@ -24,54 +27,42 @@ public class StateWelcome extends BasicGameState {
 	public int totalDelta = 0;
 
 	@Override
-	public void init(GameContainer gc, StateBasedGame sbg)
-			throws SlickException {
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
-			makerIcon = new Image(
-					(InputStream) new FileInputStream(
-							new File(
-									BlackAndWhiteForest.textureFolder.getPath()
-											+ (BlackAndWhiteForest.isWindowsOs ? "\\icon\\icon_640_480.png"
-													: "/icon/icon_640_480.png"))),
-					"Icon", false);
+			makerIcon = new Image((InputStream) new FileInputStream(
+					new File(BAWFUsefulFunctions.getResource("icon", "icon_640_480.png"))), "Icon", false);
 
 		} catch (Exception e) {
-			BlackAndWhiteForest.handleException(e, true);
+			BAWFUsefulFunctions.handleException(e, true);
 		}
 	}
 
 	@Override
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
-			throws SlickException {
-		BlackAndWhiteForest.BAWF_EVENT_BUS.post(new StateRenderingEvent(this,
-				gc, sbg, g));
-		g.drawImage(makerIcon, 0, 0, gc.getWidth(), gc.getHeight(), 0, 0,
-				makerIcon.getWidth(), makerIcon.getHeight());
-		g.setColor(Color.blue);
-		String info = "Press eNTeR to skip.";
-		String showDelta = "Total delta:" + String.valueOf(totalDelta);
-		g.drawString(
-				info,
-				(gc.getWidth() - gc.getDefaultFont().getWidth(info)) / 2,
-				(float) (gc.getHeight() - (gc.getHeight() / (Math.PI + Math.E))));
-		g.drawString(showDelta, gc.getWidth() / 10, gc.getHeight() / 10);
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		BlackAndWhiteForest.BAWF_EVENT_BUS.post(new StateRenderingEvent(this, gc, sbg, g));
+		if (Display.isActive()) {
+			g.drawImage(makerIcon, 0, 0, gc.getWidth(), gc.getHeight(), 0, 0, makerIcon.getWidth(),
+					makerIcon.getHeight());
+			g.setColor(Color.blue);
+			String info = "Press eNTeR to skip.";
+			String showDelta = "Total delta:" + String.valueOf(totalDelta);
+			g.drawString(info, (gc.getWidth() - gc.getDefaultFont().getWidth(info)) / 2,
+					(float) (gc.getHeight() - (gc.getHeight() / (Math.PI + Math.E))));
+			g.drawString(showDelta, gc.getWidth() / 10, gc.getHeight() / 10);
 
-		if ((totalDelta >= BlackAndWhiteForest.stateWelcomeDeltaTime)
-				|| (gc.getInput().isKeyPressed(Input.KEY_ENTER))) {
-			totalDelta = 0;
-			sbg.enterState(StateIdPool.idStateMain.hashCode(),
-					new FadeOutTransition(), new FadeInTransition());
+			if ((totalDelta >= BlackAndWhiteForest.stateWelcomeDeltaTime)
+					|| (gc.getInput().isKeyPressed(Input.KEY_ENTER))) {
+				totalDelta = 0;
+				sbg.enterState(StateIdPool.idStateMain.hashCode(), new FadeOutTransition(), new FadeInTransition());
+			}
 		}
 	}
 
 	@Override
-	public void update(GameContainer gc, StateBasedGame sbg, int delta)
-			throws SlickException {
-		BlackAndWhiteForest.BAWF_EVENT_BUS.post(new StateUpdatingEvent(this,
-				gc, sbg, delta));
-		if (gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
-			sbg.enterState(StateIdPool.idStateMain.hashCode(),
-					new FadeOutTransition(), new FadeInTransition());
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		BlackAndWhiteForest.BAWF_EVENT_BUS.post(new StateUpdatingEvent(this, gc, sbg, delta));
+		if (gc.getInput().isKeyPressed(Input.KEY_ENTER) || (totalDelta >= BlackAndWhiteForest.stateWelcomeDeltaTime)) {
+			sbg.enterState(StateIdPool.idStateMain.hashCode(), new FadeOutTransition(), new FadeInTransition());
 		}
 		this.totalDelta += delta;
 	}

@@ -1,4 +1,4 @@
-package eNTeR_studio.blackandwhiteforest.other;
+package eNTeR_studio.blackandwhiteforest;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Game;

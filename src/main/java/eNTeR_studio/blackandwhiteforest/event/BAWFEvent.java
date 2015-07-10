@@ -6,8 +6,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest.BAWFToSaveObj;
-
 public class BAWFEvent {
 
 	public static class BAWFWillStartEvent {
@@ -37,18 +35,22 @@ public class BAWFEvent {
 			this.app = app;
 		}
 	}
-
-	public static class BAWFToSaveEvent {
-
-		public BAWFToSaveObj toSaveObj;
-
-		private BAWFToSaveEvent() {
-
+	
+	public static class StateInitingEvent {
+		
+		GameState gameState;
+		GameContainer gameContainer;
+		StateBasedGame stateBasedGame;
+		
+		private StateInitingEvent() {
 		}
 
-		public BAWFToSaveEvent(BAWFToSaveObj toSaveObj) {
+		public StateInitingEvent(GameState gs, GameContainer gc,
+				StateBasedGame sbg) {
 			this();
-			this.toSaveObj = toSaveObj;
+			gameState = gs;
+			gameContainer = gc;
+			stateBasedGame = sbg;
 		}
 	}
 
