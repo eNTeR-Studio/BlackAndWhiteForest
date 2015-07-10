@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -29,8 +28,9 @@ public class StateWelcome extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
-			makerIcon = new Image((InputStream) new FileInputStream(
-					new File(BAWFUsefulFunctions.getResource("icon", "icon_640_480.png"))), "Icon", false);
+			makerIcon = new Image((InputStream) new FileInputStream(new File(
+					BAWFUsefulFunctions.getResource("assets", "fxzjshm", "textures", "icon", "icon_640_480.png"))),
+					"Icon", false);
 
 		} catch (Exception e) {
 			BAWFUsefulFunctions.handleException(e, true);
@@ -40,16 +40,17 @@ public class StateWelcome extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		BlackAndWhiteForest.BAWF_EVENT_BUS.post(new StateRenderingEvent(this, gc, sbg, g));
-		if (Display.isActive()) {
+		if (gc.hasFocus()) {
 			g.drawImage(makerIcon, 0, 0, gc.getWidth(), gc.getHeight(), 0, 0, makerIcon.getWidth(),
 					makerIcon.getHeight());
 			g.setColor(Color.blue);
-			String info = "Press eNTeR to skip.";
-			String showDelta = "Total delta:" + String.valueOf(totalDelta);
-			g.drawString(info, (gc.getWidth() - gc.getDefaultFont().getWidth(info)) / 2,
-					(float) (gc.getHeight() - (gc.getHeight() / (Math.PI + Math.E))));
-			g.drawString(showDelta, gc.getWidth() / 10, gc.getHeight() / 10);
-
+			/*
+			 * String info = "Press eNTeR to skip."; String showDelta =
+			 * "Total delta:" + String.valueOf(totalDelta); g.drawString(info,
+			 * (gc.getWidth() - gc.getDefaultFont().getWidth(info)) / 2, (float)
+			 * (gc.getHeight() - (gc.getHeight() / (Math.PI + Math.E))));
+			 * g.drawString(showDelta, gc.getWidth() / 10, gc.getHeight() / 10);
+			 */
 			if ((totalDelta >= BlackAndWhiteForest.stateWelcomeDeltaTime)
 					|| (gc.getInput().isKeyPressed(Input.KEY_ENTER))) {
 				totalDelta = 0;

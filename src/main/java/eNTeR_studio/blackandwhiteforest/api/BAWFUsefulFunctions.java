@@ -13,19 +13,33 @@ import javax.swing.JTextArea;
 import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest;
 
 public class BAWFUsefulFunctions {
-	
-	/**The date.*/
+
+	/** The date. */
 	public static String date;
-	
-	/**Read a config file. <code>key.length</code> must equals <code>defaultvalue.length</code> and <code>defaultvalue.length</code><br/>
+
+	/**
+	 * Read a config file. <code>key.length</code> must equals
+	 * <code>defaultvalue.length</code> and <code>defaultvalue.length</code>
+	 * <br/>
 	 * If there isn't a config file, we will create one for you.
-	 * @param configFile is the file you need to read.
-	 * @param key are the hashtable keys.
-	 * @param defaultvalue are the default values. When we create a config file, we need them to return.
-	 * @param defaultDoesNeedEqual To tell us if you need to add a '=' between key and value.
-	 * @return A Properties Object. you can use it like : <code>properties.getProperty(key, defaultvalue);</code>
-	 * @throws Exception if <code>key.length</code> doesn't equal <code>defaultvalue.length</code> or <code>defaultvalue.length</code>, we will throw it.
-	 * @author fxzjshm*/
+	 * 
+	 * @param configFile
+	 *            is the file you need to read.
+	 * @param key
+	 *            are the hashtable keys.
+	 * @param defaultvalue
+	 *            are the default values. When we create a config file, we need
+	 *            them to return.
+	 * @param defaultDoesNeedEqual
+	 *            To tell us if you need to add a '=' between key and value.
+	 * @return A Properties Object. you can use it like :
+	 *         <code>properties.getProperty(key, defaultvalue);</code>
+	 * @throws Exception
+	 *             if <code>key.length</code> doesn't equal
+	 *             <code>defaultvalue.length</code> or
+	 *             <code>defaultvalue.length</code>, we will throw it.
+	 * @author fxzjshm
+	 */
 	public static Properties readConfig(File configFile, String[] key, String[] defaultvalue,
 			boolean[] defaultDoesNeedEqual) throws Exception {
 		if (key.length != defaultvalue.length)
@@ -36,16 +50,60 @@ public class BAWFUsefulFunctions {
 		Properties properties = new Properties();
 		properties.load(new FileInputStream(configFile));
 		return properties;
-
 	}
 
-	/**Write a config file. <code>key.length</code> must equals <code>defaultvalue.length</code> and <code>defaultvalue.length</code><br/>
-	 * @param configFile is the file you need to write.
-	 * @param key are the hashtable keys.
-	 * @param value are the default values. When we create a config file, we need them to return.
-	 * @param doesNeedEqual To tell us if you need to add a '=' between key and value.
-	 * @throws Exception if <code>key.length</code> doesn't equal <code>defaultvalue.length</code> or <code>defaultvalue.length</code>, we will throw it.
-	 * @author fxzjshm*/
+	/**
+	 * Read a config file. <code>key.length</code> must equals
+	 * <code>defaultvalue.length</code> and <code>defaultvalue.length</code>
+	 * <br/>
+	 * If there isn't a config file, we will create one for you.
+	 * 
+	 * @param configFile
+	 *            is the file you need to read.
+	 * @param key
+	 *            are the hashtable keys.
+	 * @param defaultvalue
+	 *            are the default values. When we create a config file, we need
+	 *            them to return.
+	 * @param defaultDoesNeedEqual
+	 *            To tell us if you need to add a '=' between key and value.
+	 * @return A Properties Object. you can use it like :
+	 *         <code>properties.getProperty(key, defaultvalue);</code>
+	 * @throws Exception
+	 *             if <code>key.length</code> doesn't equal
+	 *             <code>defaultvalue.length</code> or
+	 *             <code>defaultvalue.length</code>, we will throw it.
+	 * @author fxzjshm
+	 */
+	public static Properties readConfig(File configFile, String[] key, String[] defaultvalue) throws Exception {
+		if (key.length != defaultvalue.length)
+			throw new Exception("Two length don't equals.");
+		if (!configFile.exists()) {
+			writeConfig(configFile, key, defaultvalue);
+		}
+		Properties properties = new Properties();
+		properties.load(new FileInputStream(configFile));
+		return properties;
+	}
+
+	/**
+	 * Write a config file. <code>key.length</code> must equals
+	 * <code>defaultvalue.length</code> and <code>defaultvalue.length</code>
+	 * <br/>
+	 * 
+	 * @param configFile
+	 *            is the file you need to write.
+	 * @param key
+	 *            are the hashtable keys.
+	 * @param value
+	 *            are the default values. When we create a config file, we need
+	 *            them to return.
+	 * @throws Exception
+	 *             if <code>key.length</code> doesn't equal
+	 *             <code>defaultvalue.length</code> or
+	 *             <code>defaultvalue.length</code>, we will throw it.
+	 * @author fxzjshm
+	 */
 	public static void writeConfig(File configFile, String[] key, String[] value, boolean[] doesNeedEqual)
 			throws Exception {
 		if (key.length != value.length || doesNeedEqual.length != key.length)
@@ -63,7 +121,38 @@ public class BAWFUsefulFunctions {
 		configPrintStream.flush();
 		configPrintStream.close();
 	}
-	
+
+	/**
+	 * Write a config file. <code>key.length</code> must equals
+	 * <code>defaultvalue.length</code> and <code>defaultvalue.length</code>
+	 * <br/>
+	 * 
+	 * @param configFile
+	 *            is the file you need to write.
+	 * @param key
+	 *            are the hashtable keys.
+	 * @param value
+	 *            are the default values. When we create a config file, we need
+	 *            them to return.
+	 * @throws Exception
+	 *             if <code>key.length</code> doesn't equal
+	 *             <code>defaultvalue.length</code> or
+	 *             <code>defaultvalue.length</code>, we will throw it.
+	 * @author fxzjshm
+	 */
+	public static void writeConfig(File configFile, String[] key, String[] value) throws Exception {
+		if (key.length != value.length)
+			throw new Exception("Two length don't equals.");
+		configFile.createNewFile();
+		PrintStream configPrintStream = new PrintStream(configFile);
+		for (int i = 0; i < key.length; i++) {
+			configPrintStream.write((key[i] + "=" + value[i]).getBytes());
+			configPrintStream.write("\r\n".getBytes());
+		}
+		configPrintStream.flush();
+		configPrintStream.close();
+	}
+
 	/**
 	 * To get system time.
 	 * 
@@ -128,6 +217,11 @@ public class BAWFUsefulFunctions {
 
 	@Deprecated
 	public static boolean showExceptionDialog(Exception exception) {
+		return showExceptionDialog(exception, "eNTeR-Studio");
+	}
+
+	@Deprecated
+	public static boolean showExceptionDialog(Exception exception, String makerName) {
 		int x = 480;
 		int y = 360;
 		try {
@@ -138,7 +232,7 @@ public class BAWFUsefulFunctions {
 			JTextArea jtextarea = new JTextArea();
 			jtextarea.setBounds(0, 0, x, y);
 			jtextarea.setText(exception.toString() + "\nTo know more info, please see:\n./crash-report/BAWFCrash."
-					+ date + ".log\nPlease send these to eNTeR-Studio.");
+					+ date + ".log\nPlease send these to " + makerName);
 			container.add(jtextarea);
 
 			jframe.setSize(x, y);
@@ -151,13 +245,15 @@ public class BAWFUsefulFunctions {
 	}
 
 	/**
-	 * Let me handle the exception for you.
+	 * Let me handle the exception for you. But we will show
+	 * <code>"Please send these to eNTeR-Studio"</code>.
 	 * 
 	 * @param exception
 	 *            is the exception to handle.
 	 * @return If it is successful to handle the exception.
 	 */
 	public static boolean handleException(Exception exception, boolean isAutoClose) {
+		exception.printStackTrace();
 		boolean isSuccessful1 = writeCrash(exception);
 		boolean isSuccessful2 = showExceptionDialog(exception);
 		if (isAutoClose) {
@@ -166,8 +262,36 @@ public class BAWFUsefulFunctions {
 		return isSuccessful1 && isSuccessful2;
 	}
 
+	/**
+	 * Let me handle the exception for you. But we will show
+	 * <code>"Please send these to " + makerName</code>.
+	 * 
+	 * @param exception
+	 *            is the exception to handle.
+	 * @param makerName
+	 *            is your name. That means, it will show
+	 *            <code>"Please send these to " + makerName</code>.
+	 * @return If it is successful to handle the exception.
+	 */
+	public static boolean handleException(Exception exception, boolean isAutoClose, String makerName) {
+		boolean isSuccessful1 = writeCrash(exception);
+		boolean isSuccessful2 = showExceptionDialog(exception, makerName);
+		if (isAutoClose) {
+			System.exit(0);
+		}
+		return isSuccessful1 && isSuccessful2;
+	}
+
+	/**
+	 * To return the path of the resource which you want.
+	 * 
+	 * @param toAddPathName
+	 *            the names of folders and the name of the resource.
+	 * @return the path of the resource which you want.
+	 * @see eNTeR_studio.blackandwhiteforest.state.StateMain#init
+	 */
 	public static String getResource(String... toAddPathName) {
-		StringBuilder realPath = new StringBuilder(32).append(BlackAndWhiteForest.textureFolder.getPath());
+		StringBuilder realPath = new StringBuilder(64).append(BlackAndWhiteForest.textureFolder.getPath());
 		for (int i = 0; i < toAddPathName.length; i++) {
 			realPath.append(BlackAndWhiteForest.separator).append(toAddPathName[i]);
 		}

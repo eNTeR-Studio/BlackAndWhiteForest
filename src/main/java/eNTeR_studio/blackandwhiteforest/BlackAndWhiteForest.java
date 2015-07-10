@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.util.Properties;
 
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -33,7 +34,6 @@ public class BlackAndWhiteForest extends StateBasedGame {
 	public static File textureFolder;
 	public static String separator = (BlackAndWhiteForest.isWindowsOs ? "\\" : "/");
 
-
 	public BlackAndWhiteForest() {
 		this(GAME_NAME);
 	}
@@ -58,16 +58,17 @@ public class BlackAndWhiteForest extends StateBasedGame {
 			readConfig();
 			separator = (isWindowsOs ? "\\" : "/");
 			if (isInEclipse) {
-				textureFolder = new File(
-						URLDecoder.decode(BlackAndWhiteForest.class.getResource("/assets/fxzjshm/textures").getFile()));
+				textureFolder = new File(URLDecoder.decode(BlackAndWhiteForest.class.getResource("/assets").getFile()))
+						.getParentFile();
 			} else {
-				textureFolder = new File(new File("").getAbsolutePath()
-						+ (isWindowsOs ? "\\assets\\fxzjshm\\textures" : "/assets/fxzjshm/textures"));
+				textureFolder = new File(new File("").getAbsolutePath());
 			}
 			BAWF_EVENT_BUS.register(new BlackAndWhiteForest());
-			BAWFAppGameContainer app = new BAWFAppGameContainer(new BlackAndWhiteForest());
+			AppGameContainer app = new AppGameContainer(new BlackAndWhiteForest());
 			app.setDisplayMode(width, height, false);
 			app.setTargetFrameRate(fps);
+			app.setShowFPS(false);
+			app.setForceExit(false);
 			System.out.println("AppGameContainer is starting.");
 			BAWF_EVENT_BUS.post(new BAWFWillStartEvent(app));
 			app.start();
@@ -79,7 +80,7 @@ public class BlackAndWhiteForest extends StateBasedGame {
 			BAWFUsefulFunctions.showExceptionDialog(allExceptions);
 		}
 	}
-	
+
 	private static void readConfig() throws Exception {
 		Properties properties = BAWFUsefulFunctions.readConfig(new File("BAWFConfig.cfg"),
 				new String[] { "width", "height", "fps", "", "showTime" },
@@ -106,6 +107,6 @@ public class BlackAndWhiteForest extends StateBasedGame {
 	 * <code>idStateMain.hashcode()</code>
 	 */
 	public static enum StateIdPool {
-		idStateWelcome, idStateMain, idStateSettings
+		idStateWelcome, idStateMain
 	}
 }
