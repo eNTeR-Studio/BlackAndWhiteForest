@@ -14,6 +14,19 @@ import eNTeR_studio.blackandwhiteforest.state.ScreenMain;
 import eNTeR_studio.blackandwhiteforest.state.ScreenWelcome;
 
 public class BlackAndWhiteForest extends Game {
+	/**
+	Command: keytool -genkey -v -keystore key.keystore -alias key.keystore -keyalg RSA -keysize 2048 -validity 100000
+	Password: 123456
+	Name: eNTeR_studio.blackandwhiteforest
+	Organization: eNTeR_studio
+	City: haimen
+	Province: jiangsu
+	Country: CN
+	
+	Info:CN=eNTeR_studio.blackandwhiteforest, OU=eNTeR_studio, O=eNTeR_studio, L=haimen, ST=jiangsu, C=CN
+	
+	Command: jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore key.keystore bawf.apk key.keystore
+	*/
 	public SpriteBatch batch;
 	public Texture icon;
 	public Stage stage;
@@ -38,7 +51,7 @@ public class BlackAndWhiteForest extends Game {
 		viewport = new ScalingViewport(Scaling.stretch, 0, 0, camera);
 		stage = new Stage(viewport, batch);
 		welcome=new ScreenWelcome(this);
-		main=new ScreenMain();
+		main=new ScreenMain(this);
 		
 		this.setScreen(welcome);
 		
@@ -49,5 +62,7 @@ public class BlackAndWhiteForest extends Game {
 		super.render();
 		delta = Gdx.graphics.getDeltaTime();
 		totalDelta += delta;
+		System.out.println(screen.getClass().getName());
+		System.out.println(totalDelta);
 	}
 }

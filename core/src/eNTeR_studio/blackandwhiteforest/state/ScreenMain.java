@@ -1,8 +1,21 @@
 package eNTeR_studio.blackandwhiteforest.state;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest;
 
 public class ScreenMain implements Screen{
+	
+	public BlackAndWhiteForest bawf;
+
+	private ScreenMain() {
+	}
+
+	public ScreenMain(BlackAndWhiteForest game) {
+		this();
+		this.bawf = game;
+	}
 
 	@Override
 	public void show() {
@@ -12,8 +25,11 @@ public class ScreenMain implements Screen{
 
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		bawf.batch.begin();
 		
+		bawf.batch.end();
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class ScreenWelcome implements Screen {
 
 	@Override
 	public void show() {
-		icon = new Texture("assets/fxzjshm/textures/icon/icon.png");
+		icon = new Texture("fxzjshm/textures/icon/icon.png");
 
 	}
 
