@@ -1,8 +1,8 @@
-package eNTeR_studio.blackandwhiteforest.desktop;
+package enter.blackandwhiteforest.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest;
+import enter.blackandwhiteforest.BlackAndWhiteForest;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

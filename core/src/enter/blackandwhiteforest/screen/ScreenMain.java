@@ -1,9 +1,10 @@
-package eNTeR_studio.blackandwhiteforest.state;
+package enter.blackandwhiteforest.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import eNTeR_studio.blackandwhiteforest.BlackAndWhiteForest;
+
+import enter.blackandwhiteforest.BlackAndWhiteForest;
 
 public class ScreenMain implements Screen{
 	

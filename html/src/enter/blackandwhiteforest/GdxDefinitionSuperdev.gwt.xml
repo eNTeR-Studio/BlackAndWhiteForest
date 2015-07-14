@@ -4,8 +4,11 @@
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 	<inherits name='com.badlogic.gdx.physics.box2d.box2d-gwt' />
 
-	<inherits name='BlackAndWhiteForest' />
-	<entry-point class='eNTeR_studio.blackandwhiteforest.client.HtmlLauncher' />
-	
-	<set-configuration-property name="gdx.assetpath" value="../android/assets" />
+    <inherits name='enter.blackandwhiteforest.GdxDefinition' />
+    
+    <collapse-all-properties />
+    
+	<add-linker name="xsiframe"/>	
+	<set-configuration-property name="devModeRedirectEnabled" value="true"/>
+	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>	
 </module>
