@@ -1,9 +1,9 @@
-package enter.blackandwhiteforest.client;
+package org.enter.blackandwhiteforest.client;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import enter.blackandwhiteforest.BlackAndWhiteForest;
+import org.enter.blackandwhiteforest.BlackAndWhiteForest;
 
 public class HtmlLauncher extends GwtApplication {
 

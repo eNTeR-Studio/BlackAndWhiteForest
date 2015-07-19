@@ -4,9 +4,9 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
+            java.srcDirs = ['src/']
+            aidl.srcDirs = ['src/']
+            renderscript.srcDirs = ['src/']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
@@ -59,7 +59,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'enter.blackandwhiteforest.android/enter.blackandwhiteforest.android.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'org.enter.blackandwhiteforest.android/org.enter.blackandwhiteforest.android.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

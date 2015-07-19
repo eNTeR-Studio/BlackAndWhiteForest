@@ -1,7 +1,11 @@
-package enter.blackandwhiteforest;
+package org.enter.blackandwhiteforest;
 
-import com.badlogic.gdx.Game;
+import org.enter.blackandwhiteforest.screen.ScreenMain;
+import org.enter.blackandwhiteforest.screen.ScreenWelcome;
+
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,10 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
-import enter.blackandwhiteforest.screen.ScreenMain;
-import enter.blackandwhiteforest.screen.ScreenWelcome;
-
-public class BlackAndWhiteForest extends Game {
+public class BlackAndWhiteForest extends ApplicationAdapter {
 	/*
 	 * Command: keytool -genkey -v -keystore key.keystore -alias key.keystore
 	 * -keyalg RSA -keysize 2048 -validity 100000 Password: 123456 Name:
@@ -26,6 +27,7 @@ public class BlackAndWhiteForest extends Game {
 	 * Command: jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore
 	 * key.keystore bawf.apk key.keystore
 	 */
+	public Screen screen;
 	public SpriteBatch batch;
 	public Texture icon;
 	public Stage stage;
@@ -58,10 +60,59 @@ public class BlackAndWhiteForest extends Game {
 
 	@Override
 	public void render() {
-		super.render();
+		if (screen != null)
+			screen.render(Gdx.graphics.getDeltaTime());
 		delta = Gdx.graphics.getDeltaTime();
 		totalDelta += delta;
-		//System.out.println(screen.getClass().getName());
-		//System.out.println(totalDelta);
+		// System.out.println(screen.getClass().getName());
+		// System.out.println(totalDelta);
+	}
+
+	@Override
+	public void dispose() {
+		if (screen != null)
+			screen.hide();
+	}
+
+	@Override
+	public void pause() {
+		if (screen != null)
+			screen.pause();
+	}
+
+	@Override
+	public void resume() {
+		if (screen != null)
+			screen.resume();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		if (screen != null)
+			screen.resize(width, height);
+	}
+
+	/**
+	 * Sets the current screen. {@link Screen#hide()} is called on any old
+	 * screen, and {@link Screen#show()} is called on the new screen, if any.
+	 * 
+	 * @param screen
+	 *            may be {@code null}
+	 */
+	public void setScreen(Screen screen) {
+		if (this.screen != null)
+			this.screen.hide();
+		this.screen = screen;
+		if (this.screen != null) {
+			this.screen.show();
+			this.screen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		}
+	}
+
+	/**
+	 * @return the currently active {@link Screen}.
+	 */
+	public Screen getScreen() {
+		return screen;
 	}
 }

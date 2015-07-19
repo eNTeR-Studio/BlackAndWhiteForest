@@ -1,20 +1,16 @@
-package enter.blackandwhiteforest.screen;
+package org.enter.blackandwhiteforest.screen;
+
+import org.enter.blackandwhiteforest.BlackAndWhiteForest;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
-import enter.blackandwhiteforest.BlackAndWhiteForest;
-
 public class ScreenMain implements Screen{
 	
 	public BlackAndWhiteForest bawf;
 
-	private ScreenMain() {
-	}
-
 	public ScreenMain(BlackAndWhiteForest game) {
-		this();
 		this.bawf = game;
 	}
 

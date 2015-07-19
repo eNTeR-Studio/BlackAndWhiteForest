@@ -1,11 +1,11 @@
-package enter.blackandwhiteforest;
+package org.enter.blackandwhiteforest;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import enter.blackandwhiteforest.BlackAndWhiteForest;
+import org.enter.blackandwhiteforest.BlackAndWhiteForest;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @Override

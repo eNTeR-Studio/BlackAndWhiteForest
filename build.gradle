@@ -17,7 +17,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = 'BlackAndWhiteForest'
+        appName = 'blackandwhiteforest'
         gdxVersion = '1.6.4'
         roboVMVersion = '1.5.0'
         box2DLightsVersion = '1.4'
@@ -41,6 +41,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     }
 }
 
@@ -59,6 +60,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
+        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 }
 
@@ -89,6 +91,7 @@ project(":html") {
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
+        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
     }
 }
 
@@ -99,6 +102,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 }
 

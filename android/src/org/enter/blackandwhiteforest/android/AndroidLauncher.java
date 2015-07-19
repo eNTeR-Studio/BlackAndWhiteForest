@@ -1,10 +1,10 @@
-package enter.blackandwhiteforest.android;
+package org.enter.blackandwhiteforest.android;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import enter.blackandwhiteforest.BlackAndWhiteForest;
+import org.enter.blackandwhiteforest.BlackAndWhiteForest;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override

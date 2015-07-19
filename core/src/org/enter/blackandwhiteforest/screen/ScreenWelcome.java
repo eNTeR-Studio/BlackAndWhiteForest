@@ -1,22 +1,18 @@
-package enter.blackandwhiteforest.screen;
+package org.enter.blackandwhiteforest.screen;
+
+import org.enter.blackandwhiteforest.BlackAndWhiteForest;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 
-import enter.blackandwhiteforest.BlackAndWhiteForest;
-
 public class ScreenWelcome implements Screen {
 
 	public BlackAndWhiteForest bawf;
 	public Texture icon;
 
-	private ScreenWelcome() {
-	}
-
 	public ScreenWelcome(BlackAndWhiteForest game) {
-		this();
 		this.bawf = game;
 	}
 
