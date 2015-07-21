@@ -1,39 +1,39 @@
 package org.enter.blackandwhiteforest.screen;
 
 import org.enter.blackandwhiteforest.BlackAndWhiteForest;
+import org.enter.blackandwhiteforest.api.IBAWFPlugin;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class ScreenWelcome implements Screen {
+public class ScreenWelcome implements Screen, IBAWFPlugin {
 
-	public BlackAndWhiteForest bawf;
-	public Texture icon;
+	public static Image icon;
+	public static float totalDelta = 0F;
+	public static boolean hasBlockAdded = false;
 
-	public ScreenWelcome(BlackAndWhiteForest game) {
-		this.bawf = game;
+	public void init() {
+		icon = new Image(new Texture("fxzjshm/textures/icon.png"));
+		icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
+		BlackAndWhiteForest.initTime++;
 	}
 
 	@Override
 	public void show() {
-		icon = new Texture("fxzjshm/textures/icon/icon.png");
-
+		BlackAndWhiteForest.stage.addActor(icon);
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		bawf.batch.begin();
-		
-		bawf.batch.draw(icon, 0, 0, bawf.width, bawf.height);
-		
-		bawf.batch.end();
-		
-		if (bawf.totalDelta > (Math.PI + Math.E) / 2)
-			bawf.setScreen(bawf.main);
+		if (BlackAndWhiteForest.totalDelta > (Math.PI + Math.E) / 2) {
+			if (totalDelta > 1) {
+				BlackAndWhiteForest.stage.clear();
+				BlackAndWhiteForest.stage.getBatch().flush();
+				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.main);
+			}
+			totalDelta += delta;
+		}
 	}
 
 	@Override

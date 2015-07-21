@@ -7,6 +7,6 @@ import org.enter.blackandwhiteforest.BlackAndWhiteForest;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new BlackAndWhiteForest(), config);
+		new LwjglApplication(BlackAndWhiteForest.INSTANSE, config);
 	}
 }
