@@ -1,20 +1,82 @@
 package enter.blackandwhiteforest.screen;
 
 import enter.blackandwhiteforest.BlackAndWhiteForest;
+import enter.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import enter.blackandwhiteforest.api.IBAWFPlugin;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class ScreenSettings implements Screen, IBAWFPlugin {
 
+	public static ImageButton buttonBack;
+	public static TextureRegionDrawable backUp;
+	public static TextureRegionDrawable backDown;
+	public static boolean hasBackClicked = false;
+	
+	public static boolean hasActionAdded = false;
+	public static float totalDelta = 0;
+
+	public void init() {
+		backUp = new TextureRegionDrawable(
+new TextureRegion(
+				new Texture(Gdx.files.internal(BlackAndWhiteForest.getPath(ResourceType.texture, "back.png")))));
+		backUp.getRegion().setRegion(0, 0, backUp.getRegion().getRegionWidth() / 3 * 4,
+				backUp.getRegion().getRegionHeight());
+		backDown = new TextureRegionDrawable(
+				new TextureRegion(new Texture(Gdx.files.internal(BlackAndWhiteForest.getPath(ResourceType.texture, "backClicked.png")))));
+		backDown.getRegion().setRegion(0, 0, backDown.getRegion().getRegionWidth() / 3 * 5,
+				backDown.getRegion().getRegionHeight());
+		buttonBack = new ImageButton(backUp, backDown);
+		buttonBack.setBounds(-BlackAndWhiteForest.width / 50F, (float) (BlackAndWhiteForest.height / 4F * 3F),
+				BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 5F);
+		buttonBack.addListener(new EventListener() {
+			@Override
+			public boolean handle(Event event) {
+				if (event instanceof InputEvent && ((InputEvent) event).getType().equals(InputEvent.Type.touchUp)) {
+					hasBackClicked=true;
+				}
+				return true;
+			}
+		});
+
+		BlackAndWhiteForest.initTime++;
+	}
+
 	@Override
 	public void show() {
-
+		totalDelta=0;
+		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
+		BlackAndWhiteForest.stage.addAction(alpha);
+		BlackAndWhiteForest.stage.addActor(buttonBack);
 	}
 
 	@Override
 	public void render(float delta) {
-
+		if (hasBackClicked) {
+			if(!hasActionAdded){
+			AlphaAction alpha = Actions.fadeOut((float) (Math.PI - Math.E));
+			BlackAndWhiteForest.stage.addAction(alpha);
+			hasActionAdded=true;
+			}
+			if (totalDelta >= (Math.PI - Math.E)) {
+				hasActionAdded = false;
+				hasBackClicked=false;
+				BlackAndWhiteForest.stage.clear();
+				BlackAndWhiteForest.stage.getBatch().flush();
+				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.main);
+			}
+			totalDelta += delta;
+		}
 	}
 
 	@Override
@@ -41,9 +103,4 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 	public void dispose() {
 
 	}
-
-	public void init() {
-		BlackAndWhiteForest.initTime++;
-	}
-
 }

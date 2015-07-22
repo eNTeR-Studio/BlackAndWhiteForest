@@ -1,6 +1,7 @@
 package enter.blackandwhiteforest.screen;
 
 import enter.blackandwhiteforest.BlackAndWhiteForest;
+import enter.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import enter.blackandwhiteforest.api.IBAWFPlugin;
 
 import com.badlogic.gdx.Screen;
@@ -14,32 +15,35 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 	public static Image icon;
 	public static float totalDelta = 0F;
 	public static boolean hasBlockAdded = false;
+	public static boolean hasShown = false;
 
 	public void init() {
-		icon = new Image(new Texture("fxzjshm/textures/icon.png"));
+		icon = new Image(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "icon.png")));
 		icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
 		BlackAndWhiteForest.initTime++;
 	}
 
 	@Override
 	public void show() {
+		totalDelta = 0;
 		BlackAndWhiteForest.stage.addActor(icon);
 	}
 
 	@Override
 	public void render(float delta) {
-		if (BlackAndWhiteForest.totalDelta > (Math.PI + Math.E) / 3) {
+		if (BlackAndWhiteForest.totalDelta > BlackAndWhiteForest.FI) {
 			if (!hasBlockAdded) {
-				AlphaAction alpha = Actions.fadeOut(1000);
-				icon.addAction(alpha);
+				AlphaAction alpha = Actions.fadeOut((float) (Math.PI - Math.E));
+				BlackAndWhiteForest.stage.addAction(alpha);
 				hasBlockAdded = true;
+			} else {
+				totalDelta += delta;
 			}
-			if (totalDelta > 1) {
+			if (totalDelta >= (Math.PI - Math.E)) {
 				BlackAndWhiteForest.stage.clear();
 				BlackAndWhiteForest.stage.getBatch().flush();
 				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.main);
 			}
-			totalDelta += delta;
 		}
 	}
 

@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
-public class BlackAndWhiteForest extends Game implements IBAWFPlugin{
+public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	/*
 	 * Command: keytool -genkey -v -keystore key.keystore -alias key.keystore
 	 * -keyalg RSA -keysize 2048 -validity 1000000 Password: 123456 Name:
@@ -28,10 +28,9 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin{
 	 * 
 	 * Info:CN=eNTeR_studio.blackandwhiteforest, OU=eNTeR_studio,
 	 * O=eNTeR_studio, L=haimen, ST=jiangsu, C=CN
-	 * 
-	 * Command: jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore
-	 * key.keystore bawf.apk key.keystore
 	 */
+	public static final double FI = (Math.sqrt(5) + 1) / 2;
+
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
 	public static final BAWFEventBus BAWF_EVENT_BUS = new BAWFEventBus();
 
@@ -52,13 +51,29 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin{
 	public static boolean doesLoad = true;
 	public static int renderTime = 0;
 
-	public static Image block;
-
 	public static ScreenWelcome welcome;
 	public static ScreenMain main;
 	public static ScreenSettings settings;
 	public static ScreenGaming gaming;
 
+	public static enum ResourceType {
+		texture, sound, music
+	}
+
+	public static String getPath(ResourceType type, String fileName) throws IllegalArgumentException {
+		switch (type) {
+		case texture:
+			return "fxzjshm/textures/" + fileName;
+		case sound:
+			return "fxzjshm/sounds/" + fileName;
+		case music:
+			return "fxzjshm/musics/" + fileName;
+		default:
+			throw new IllegalArgumentException("Type can't be null.");
+		}
+	}
+
+	@Override
 	public void init() {
 		totalDelta = 0;
 		delta = 0;
@@ -66,8 +81,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin{
 		height = Gdx.graphics.getHeight();
 
 		progressBar = new Image(new Texture("fxzjshm/textures/Progress_bar.png"));
-		block = new Image();
-		block.setColor(0, 0, 0, 1);
 		sprite = new Sprite();
 		sprite.setPosition(0, 0);
 		sprite.setSize(width, height);
