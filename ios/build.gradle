@@ -4,7 +4,7 @@ sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-	mainClassName = "org.enter.blackandwhiteforest.IOSLauncher"
+	mainClassName = "enter.blackandwhiteforest.IOSLauncher"
 }
 
 launchIPhoneSimulator.dependsOn build
