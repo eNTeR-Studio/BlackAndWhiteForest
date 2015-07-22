@@ -4,15 +4,16 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
+
 import enter.blackandwhiteforest.api.BAWFEventReceiver;
 import enter.blackandwhiteforest.api.IBAWFEventReceiver;
-
+/**@author fxzjshm*/
 public class BAWFEventBus {
 
-	public ArrayList<IBAWFEventReceiver> receiverList = new ArrayList<IBAWFEventReceiver>();
-	public LinkedList<Method> receiverMethodList = new LinkedList<Method>();
-	public LinkedList<Object> receiverInstanceList = new LinkedList<Object>();
+	public List<IBAWFEventReceiver> receiverList = new ArrayList<IBAWFEventReceiver>();
+	public List<Method> receiverMethodList = new ArrayList<Method>();
+	public List<Object> receiverInstanceList = new ArrayList<Object>();
 
 	public boolean register(Object receiver) {
 		boolean isSuccessful = true;
@@ -68,15 +69,22 @@ public class BAWFEventBus {
 		boolean isSuccessful = true;
 		Method[] methods = receiver.getClass().getDeclaredMethods();
 		for (int i = 0; i < methods.length; i++) {
+
 			Annotation[] annotations = methods[i].getAnnotations();
 			for (int j = 0; j < annotations.length; j++) {
-				if (annotations[j] instanceof BAWFEventReceiver) {
-					isSuccessful = isSuccessful && receiverMethodList.remove(methods[i]);
+				if (annotations[j].annotationType().getName().equals(BAWFEventReceiver.class.getName())) {
+					isSuccessful = isSuccessful && receiverMethodList.remove(methods[i])&&receiverInstanceList.remove(receiver);
 					break;
 				} else if (j == annotations.length) {
 					isSuccessful = false;
 				}
 			}
+			/*
+			 * boolean isAnnotationPresent =
+			 * methods[i].isAnnotationPresent(BAWFEventReceiver.class); if
+			 * (isAnnotationPresent) isSuccessful = isSuccessful &&
+			 * receiverMethodList.remove(methods[i]);
+			 */
 		}
 		if (receiver instanceof IBAWFEventReceiver) {
 			if (isSuccessful) {
