@@ -7,8 +7,8 @@ gwt {
     minHeapSize="1G"
 
     src = files(file("src/")) // Needs to be in front of "modules" below.
-    modules 'org.enter.blackandwhiteforest.GdxDefinition'
-    devModules 'org.enter.blackandwhiteforest.GdxDefinitionSuperdev'
+    modules 'enter.blackandwhiteforest.GdxDefinition'
+    devModules 'enter.blackandwhiteforest.GdxDefinitionSuperdev'
     project.webAppDirName = 'webapp'
 
     compiler {
