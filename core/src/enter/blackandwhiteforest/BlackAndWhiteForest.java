@@ -120,6 +120,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			case 6: {
 				gaming.init();
 				doesLoad = false;
+initTime=0;
 				break;
 			}
 			default: {
