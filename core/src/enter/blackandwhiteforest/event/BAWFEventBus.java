@@ -8,6 +8,7 @@ import java.util.List;
 
 import enter.blackandwhiteforest.api.BAWFEventReceiver;
 import enter.blackandwhiteforest.api.IBAWFEventReceiver;
+
 /**@author fxzjshm*/
 public class BAWFEventBus {
 

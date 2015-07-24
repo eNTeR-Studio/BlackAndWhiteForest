@@ -19,6 +19,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
+/**
+ * 感谢 <a href="libgdx.badlogicgames.com">libGDX</a> 和
+ * <a href="http://blog.sina.com.cn/weyingkj">奋斗小土豆丶</a> <br/>
+ * <br/>
+ * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/3.0/">
+ * <img alt= "知识共享许可协议" style="border-width:0" src=
+ * "https://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />
+ * 本作品采用
+ * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/3.0/">
+ * 知识共享署名-非商业性使用- 相同方式共享 3.0 国际许可协议</a>进行许可。
+ * <hr/>
+ * 
+ * @author fxzjshm
+ */
 public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	/*
 	 * Command: keytool -genkey -v -keystore key.keystore -alias key.keystore
@@ -55,6 +69,9 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static ScreenMain main;
 	public static ScreenSettings settings;
 	public static ScreenGaming gaming;
+
+	private BlackAndWhiteForest() {
+	}
 
 	public static enum ResourceType {
 		texture, sound, music
@@ -120,7 +137,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			case 6: {
 				gaming.init();
 				doesLoad = false;
-initTime=0;
+				initTime = 0;
 				break;
 			}
 			default: {
