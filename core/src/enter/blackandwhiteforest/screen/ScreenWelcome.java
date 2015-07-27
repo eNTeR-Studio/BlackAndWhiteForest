@@ -42,6 +42,7 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 			if (totalDelta >= (Math.PI - Math.E)) {
 				BlackAndWhiteForest.stage.clear();
 				BlackAndWhiteForest.stage.getBatch().flush();
+				dispose();
 				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.main);
 			}
 		}
@@ -69,7 +70,8 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 
 	@Override
 	public void dispose() {
-
+		icon=null;
+		System.gc();
 	}
 
 }
