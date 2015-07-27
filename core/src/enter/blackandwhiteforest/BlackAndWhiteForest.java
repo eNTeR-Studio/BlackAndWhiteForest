@@ -7,12 +7,15 @@ import enter.blackandwhiteforest.screen.ScreenMain;
 import enter.blackandwhiteforest.screen.ScreenSettings;
 import enter.blackandwhiteforest.screen.ScreenWelcome;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,9 +23,11 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 /**
+ * <p>
  * 感谢 <a href="libgdx.badlogicgames.com">libGDX</a> 和
- * <a href="http://blog.sina.com.cn/weyingkj">奋斗小土豆丶</a> <br/>
- * <br/>
+ * <a href="http://blog.sina.com.cn/weyingkj">奋斗小土豆丶</a>
+ * </p>
+ * <p>
  * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/3.0/">
  * <img alt= "知识共享许可协议" style="border-width:0" src=
  * "https://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />
@@ -30,29 +35,30 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
  * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/3.0/">
  * 知识共享署名-非商业性使用- 相同方式共享 3.0 国际许可协议</a>进行许可。
  * <hr/>
+ * </p>
  * 
  * @author fxzjshm
  */
 public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	/*
 	 * Command: keytool -genkey -v -keystore key.keystore -alias key.keystore
-	 * -keyalg RSA -keysize 2048 -validity 1000000 Password: 123456 Name:
-	 * org.enter Organization: eNTeR_studio City: haimen Province: jiangsu
-	 * Country: CN
+	 * -keyalg RSA -keysize 2048 -validity 1000000. Password: 123456 Name: eNTeR
+	 * Organization: eNTeR_studio City: haimen Province: jiangsu Country: CN
 	 * 
-	 * Info:CN=eNTeR_studio.blackandwhiteforest, OU=eNTeR_studio,
-	 * O=eNTeR_studio, L=haimen, ST=jiangsu, C=CN
+	 * Info:CN=eNTeR, OU=eNTeR_studio, O=eNTeR_studio, L=haimen, ST=jiangsu,
+	 * C=CN
 	 */
 	public static final double FI = (Math.sqrt(5) + 1) / 2;
 
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
 	public static final BAWFEventBus BAWF_EVENT_BUS = new BAWFEventBus();
+	public static final Random ran = new Random();
 
 	public static SpriteBatch batch;
 	public static Stage stage;
 	public static ScalingViewport viewport;
 	public static OrthographicCamera camera;
-	public static Sprite sprite;
+	// public static Sprite sprite;
 
 	public static float totalDelta;
 	public static float delta;
@@ -63,32 +69,72 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static final int MAX_INIT_TIME = 6;
 	public static Image progressBar;
 	public static boolean doesLoad = true;
-	public static int renderTime = 0;
 
 	public static ScreenWelcome welcome;
 	public static ScreenMain main;
 	public static ScreenSettings settings;
 	public static ScreenGaming gaming;
 
-	private BlackAndWhiteForest() {
-	}
-
+	public static Sound click1;
+	public static Sound click2;
+	public static Sound click3;
+	
 	public static enum ResourceType {
 		texture, sound, music
 	}
 
-	public static String getPath(ResourceType type, String fileName) throws IllegalArgumentException {
+	public static FileHandle getPath(ResourceType type, String fileName) throws IllegalArgumentException {
 		switch (type) {
 		case texture:
-			return "fxzjshm/textures/" + fileName;
+			return Gdx.files.internal("textures/" + fileName);
 		case sound:
-			return "fxzjshm/sounds/" + fileName;
+			return Gdx.files.internal("sounds/" + fileName);
 		case music:
-			return "fxzjshm/musics/" + fileName;
+			return Gdx.files.internal("musics/" + fileName);
 		default:
 			throw new IllegalArgumentException("Type can't be null.");
 		}
 	}
+
+	public static enum SoundType {
+		click
+	}
+
+	public static long playSound(SoundType type) throws IllegalArgumentException {
+		return playSound(type,1.0F);
+	}
+	
+	public static long playSound(SoundType type, float volume) throws IllegalArgumentException {
+		switch (type) {
+		case click:
+			switch (ran.nextInt(4)) {
+			case 1:
+				return click1.play(volume);
+			case 2:
+				return click2.play(volume);
+			case 3:
+				return click3.play(volume);
+			default:
+				return playSound(SoundType.click);
+			}
+		default:
+			throw new IllegalArgumentException("Type can't be null.");
+		}
+	}
+
+	public static enum MusicType {
+
+	}
+
+	public static long playMusic(MusicType type) throws IllegalArgumentException {
+		switch (type) {
+
+		default:
+			throw new IllegalArgumentException("Type can't be null.");
+		}
+	}
+	
+	private BlackAndWhiteForest() {}
 
 	@Override
 	public void init() {
@@ -97,10 +143,14 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 
-		progressBar = new Image(new Texture("fxzjshm/textures/Progress_bar.png"));
-		sprite = new Sprite();
-		sprite.setPosition(0, 0);
-		sprite.setSize(width, height);
+		click1 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "click.mp3"));
+		click2 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "hat.mp3"));
+		click3 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "ignite.mp3"));
+
+		progressBar = new Image(new Texture(getPath(ResourceType.texture, "Progress_bar.png")));
+		// sprite = new Sprite();
+		// sprite.setPosition(0, 0);
+		// setSize(width, height);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(width, height);
 		camera.position.set(camera.viewportWidth / 2F, camera.viewportHeight / 2F, 0);
@@ -126,6 +176,9 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public void render() {
 		if (doesLoad) {
 			switch (initTime) {
+			case 0: {
+				create();
+			}
 			case 4: {
 				main.init();
 				break;
@@ -145,11 +198,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 				break;
 			}
 			}
-			// Gdx.gl.glClearColor(0, 0, 0, 1);
-			// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
 			stage.draw();
-			// if (initTime <= MAX_INIT_TIME)
 			progressBar.setBounds(0, 0, width / MAX_INIT_TIME * initTime, height / 50);
 			return;
 		}

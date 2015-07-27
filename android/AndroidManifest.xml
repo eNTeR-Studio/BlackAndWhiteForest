@@ -4,7 +4,15 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="22" />
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,11 +21,12 @@
         android:theme="@style/GdxTheme" >
         <activity
             android:name="enter.blackandwhiteforest.android.AndroidLauncher"
-            android:label="@string/app_name" 
-            android:screenOrientation="landscape"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -2,9 +2,9 @@ package enter.blackandwhiteforest.screen;
 
 import enter.blackandwhiteforest.BlackAndWhiteForest;
 import enter.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
+import enter.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import enter.blackandwhiteforest.api.IBAWFPlugin;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -33,17 +33,17 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 
 	public void init() {
 		startUp = new TextureRegionDrawable(new TextureRegion(
-				new Texture(Gdx.files.internal(BlackAndWhiteForest.getPath(ResourceType.texture, "start.png")))));
+				new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "start.png"))));
 		startDown = new TextureRegionDrawable(new TextureRegion(new Texture(
-				Gdx.files.internal(BlackAndWhiteForest.getPath(ResourceType.texture, "startClicked.png")))));
+				BlackAndWhiteForest.getPath(ResourceType.texture, "startClicked.png"))));
 		buttonStart = new ImageButton(startUp, startDown);
 		buttonStart.setBounds(BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F,
 				BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F);
 
 		settingsUp = new TextureRegionDrawable(new TextureRegion(
-				new Texture(Gdx.files.internal(BlackAndWhiteForest.getPath(ResourceType.texture, "settings.png")))));
+				new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "settings.png"))));
 		settingsDown = new TextureRegionDrawable(new TextureRegion(new Texture(
-				Gdx.files.internal(BlackAndWhiteForest.getPath(ResourceType.texture, "settingsClicked.png")))));
+				BlackAndWhiteForest.getPath(ResourceType.texture, "settingsClicked.png"))));
 		buttonSettings = new ImageButton(settingsUp, settingsDown);
 		buttonSettings.setBounds(0, 0, BlackAndWhiteForest.width / 5F, BlackAndWhiteForest.height / 5F);
 		buttonSettings.addListener(new EventListener() {
@@ -51,6 +51,7 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 			public boolean handle(Event event) {
 				if (event instanceof InputEvent && ((InputEvent) event).getType().equals(InputEvent.Type.touchUp)) {
 					hasSettingsClicked = true;
+					BlackAndWhiteForest.playSound(SoundType.click);
 				}
 				return true;
 			}
