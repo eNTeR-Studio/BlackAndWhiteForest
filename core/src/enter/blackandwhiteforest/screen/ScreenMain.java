@@ -56,7 +56,7 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 				return true;
 			}
 		});
-		BlackAndWhiteForest.initTime++;
+		//BlackAndWhiteForest.initTime++;
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 			}
 		});
 
-		BlackAndWhiteForest.initTime++;
+		//BlackAndWhiteForest.initTime++;
 	}
 
 	@Override

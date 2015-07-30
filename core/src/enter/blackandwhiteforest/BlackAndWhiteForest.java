@@ -15,10 +15,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
@@ -60,24 +58,20 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static OrthographicCamera camera;
 	// public static Sprite sprite;
 
-	public static float totalDelta;
-	public static float delta;
-	public static int width;
-	public static int height;
+	public static float totalDelta,delta;
+	public static int width,height;
 
-	public static int initTime = 0;
-	public static final int MAX_INIT_TIME = 6;
+	/*public static int initTime = 0;
+	public static final int MAX_INIT_TIME = 5;
 	public static Image progressBar;
-	public static boolean doesLoad = true;
+	public static boolean doesLoad = true;*/
 
 	public static ScreenWelcome welcome;
 	public static ScreenMain main;
 	public static ScreenSettings settings;
 	public static ScreenGaming gaming;
 
-	public static Sound click1;
-	public static Sound click2;
-	public static Sound click3;
+	public static Sound click1,click2,click3;
 	
 	public static enum ResourceType {
 		texture, sound, music
@@ -147,7 +141,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		click2 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "hat.mp3"));
 		click3 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "ignite.mp3"));
 
-		progressBar = new Image(new Texture(getPath(ResourceType.texture, "Progress_bar.png")));
+		//progressBar = new Image(new Texture(getPath(ResourceType.texture, "Progress_bar.png")));
 		// sprite = new Sprite();
 		// sprite.setPosition(0, 0);
 		// setSize(width, height);
@@ -156,7 +150,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		camera.position.set(camera.viewportWidth / 2F, camera.viewportHeight / 2F, 0);
 		viewport = new ScalingViewport(Scaling.stretch, width, height, camera);
 		stage = new Stage(viewport, batch);
-		initTime++;
+		//initTime++;
 	}
 
 	@Override
@@ -165,15 +159,26 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		main = new ScreenMain();
 		settings = new ScreenSettings();
 		gaming = new ScreenGaming();
+		
 		init();
+		//stage.addActor(progressBar);
+		//drawProgressBar();
 		welcome.init();
 		setScreen(welcome);
-		stage.addActor(progressBar);
+		//drawProgressBar();
+		main.init();
+		//drawProgressBar();
+		settings.init();
+		//drawProgressBar();
+		gaming.init();
+		//drawProgressBar();
+		
 		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void render() {
+		/*
 		if (doesLoad) {
 			switch (initTime) {
 			case 0: {
@@ -202,7 +207,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			stage.draw();
 			progressBar.setBounds(0, 0, width / MAX_INIT_TIME * initTime, height / 50);
 			return;
-		}
+		}*/
 		super.render();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -211,5 +216,13 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		delta = Gdx.graphics.getDeltaTime();
 		totalDelta += delta;
 	}
+	
+	/*public void drawProgressBar(){
+		stage.getRoot().removeActor(progressBar);
+		progressBar.setBounds(0, 0, width / MAX_INIT_TIME * initTime, height / 50);
+		stage.addActor(progressBar);
+		stage.act();
+		stage.draw();
+	}*/
 
 }

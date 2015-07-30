@@ -44,7 +44,7 @@ public class ScreenGaming implements Screen, IBAWFPlugin {
 	}
 
 	public void init() {
-		BlackAndWhiteForest.initTime++;
+		//BlackAndWhiteForest.initTime++;
 	}
 
 }
