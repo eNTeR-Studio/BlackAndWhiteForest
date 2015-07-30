@@ -20,7 +20,7 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 	public void init() {
 		icon = new Image(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "icon.png")));
 		icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
-		BlackAndWhiteForest.initTime++;
+		//BlackAndWhiteForest.initTime++;
 	}
 
 	@Override
