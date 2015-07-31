@@ -7,8 +7,18 @@ import enter.blackandwhiteforest.screen.ScreenMain;
 import enter.blackandwhiteforest.screen.ScreenSettings;
 import enter.blackandwhiteforest.screen.ScreenWelcome;
 
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Random;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -58,21 +68,22 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static OrthographicCamera camera;
 	// public static Sprite sprite;
 
-	public static float totalDelta,delta;
-	public static int width,height;
+	public static float totalDelta, delta;
+	public static int width, height;
 
-	/*public static int initTime = 0;
-	public static final int MAX_INIT_TIME = 5;
-	public static Image progressBar;
-	public static boolean doesLoad = true;*/
+	/*
+	 * public static int initTime = 0; public static final int MAX_INIT_TIME =
+	 * 5; public static Image progressBar; public static boolean doesLoad =
+	 * true;
+	 */
 
 	public static ScreenWelcome welcome;
 	public static ScreenMain main;
 	public static ScreenSettings settings;
 	public static ScreenGaming gaming;
 
-	public static Sound click1,click2,click3;
-	
+	public static Sound click1, click2, click3;
+
 	public static enum ResourceType {
 		texture, sound, music
 	}
@@ -95,9 +106,9 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	}
 
 	public static long playSound(SoundType type) throws IllegalArgumentException {
-		return playSound(type,1.0F);
+		return playSound(type, 1.0F);
 	}
-	
+
 	public static long playSound(SoundType type, float volume) throws IllegalArgumentException {
 		switch (type) {
 		case click:
@@ -127,8 +138,9 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			throw new IllegalArgumentException("Type can't be null.");
 		}
 	}
-	
-	private BlackAndWhiteForest() {}
+
+	private BlackAndWhiteForest() {
+	}
 
 	@Override
 	public void init() {
@@ -141,16 +153,13 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		click2 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "hat.mp3"));
 		click3 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "ignite.mp3"));
 
-		//progressBar = new Image(new Texture(getPath(ResourceType.texture, "Progress_bar.png")));
-		// sprite = new Sprite();
-		// sprite.setPosition(0, 0);
-		// setSize(width, height);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(width, height);
 		camera.position.set(camera.viewportWidth / 2F, camera.viewportHeight / 2F, 0);
 		viewport = new ScalingViewport(Scaling.stretch, width, height, camera);
 		stage = new Stage(viewport, batch);
-		//initTime++;
+		stage.setDebugAll(true);
+		// initTime++;
 	}
 
 	@Override
@@ -159,70 +168,59 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		main = new ScreenMain();
 		settings = new ScreenSettings();
 		gaming = new ScreenGaming();
-		
+
 		init();
-		//stage.addActor(progressBar);
-		//drawProgressBar();
 		welcome.init();
 		setScreen(welcome);
-		//drawProgressBar();
 		main.init();
-		//drawProgressBar();
 		settings.init();
-		//drawProgressBar();
 		gaming.init();
-		//drawProgressBar();
-		
+
 		Gdx.input.setInputProcessor(stage);
+
+		FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Desktop) ? Gdx.files.local("plugins/")
+				: Gdx.files.external("BlackAndWhiteForest/plugins/");
+		if (!pluginFolder.exists())
+			pluginFolder.mkdirs();
+		FileHandle[] jars = pluginFolder.list(".jar");
+		for (int i = 0; i < jars.length; i++) {
+			try {
+				URL url = jars[i].file().toURI().toURL();
+				URLClassLoader loader = new URLClassLoader(new URL[] { url });
+				File file = new File(jars[i].file().getAbsolutePath() + ".xml");
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document document = db.parse(file);
+				NodeList nodeList = document.getElementsByTagName("*");
+				for (int i1 = 0; i1 < nodeList.getLength(); i1++) {
+					if (nodeList.item(i1).getNodeName().equals("mainClassName")) {
+						String className = nodeList.item(i1).getChildNodes().item(0).getNodeValue();
+						Class<?> aClass = loader.loadClass(className);
+						Class<?>[] interfaces = aClass.getInterfaces();
+						for (int j = 0; j < interfaces.length; j++) {
+							if (interfaces[j].getName().equals(IBAWFPlugin.class.getName())) {
+								IBAWFPlugin instance = (IBAWFPlugin) aClass.newInstance();
+								instance.init();
+							}
+						}
+					}
+				}
+				loader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+		}
 	}
 
 	@Override
 	public void render() {
-		/*
-		if (doesLoad) {
-			switch (initTime) {
-			case 0: {
-				create();
-			}
-			case 4: {
-				main.init();
-				break;
-			}
-			case 5: {
-				settings.init();
-				break;
-			}
-			case 6: {
-				gaming.init();
-				doesLoad = false;
-				initTime = 0;
-				break;
-			}
-			default: {
-				initTime++;
-				break;
-			}
-			}
-			stage.act();
-			stage.draw();
-			progressBar.setBounds(0, 0, width / MAX_INIT_TIME * initTime, height / 50);
-			return;
-		}*/
 		super.render();
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor((float) (FI - 1), (float) (FI - 1), (float) (FI - 1), 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();
 		stage.draw();
 		delta = Gdx.graphics.getDeltaTime();
 		totalDelta += delta;
 	}
-	
-	/*public void drawProgressBar(){
-		stage.getRoot().removeActor(progressBar);
-		progressBar.setBounds(0, 0, width / MAX_INIT_TIME * initTime, height / 50);
-		stage.addActor(progressBar);
-		stage.act();
-		stage.draw();
-	}*/
-
 }

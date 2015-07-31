@@ -32,7 +32,7 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 				backUp.getRegion().getRegionHeight());
 		backDown = new TextureRegionDrawable(new TextureRegion(
 				new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "backClicked.png"))));
-		backDown.getRegion().setRegion(0, 0, backDown.getRegion().getRegionWidth() / 3 * 5,
+		backDown.getRegion().setRegion(0, 0, backDown.getRegion().getRegionWidth() / 3 * 4,
 				backDown.getRegion().getRegionHeight());
 		buttonBack = new ImageButton(backUp, backDown);
 		buttonBack.setBounds(0, (float) (BlackAndWhiteForest.height / 4F * 3F), BlackAndWhiteForest.width / 3F,
