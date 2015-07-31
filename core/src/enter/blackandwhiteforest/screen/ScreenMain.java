@@ -4,6 +4,7 @@ import enter.blackandwhiteforest.BlackAndWhiteForest;
 import enter.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import enter.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import enter.blackandwhiteforest.api.IBAWFPlugin;
+import enter.blackandwhiteforest.map.BAWFMap;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,6 +40,15 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 		buttonStart = new ImageButton(startUp, startDown);
 		buttonStart.setBounds(BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F,
 				BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F);
+		buttonStart.addListener(new EventListener() {
+			@Override
+			public boolean handle(Event event) {
+				if (event instanceof InputEvent && ((InputEvent) event).getType().equals(InputEvent.Type.touchUp)) {
+					BAWFMap.INSTANCE.load();
+				}
+				return true;
+			}
+		});
 
 		settingsUp = new TextureRegionDrawable(new TextureRegion(
 				new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "settings.png"))));

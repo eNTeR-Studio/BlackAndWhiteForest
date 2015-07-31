@@ -1,32 +1,31 @@
 package enter.blackandwhiteforest.map;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
-public class BAWFMapBlock extends Actor{
-	public Color color;
-	public Image image;
+import enter.blackandwhiteforest.BlackAndWhiteForest;
+import enter.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
+
+public class BAWFMapBlock extends Image {
 	
-	public BAWFMapBlock(Color color, float x,float y,float size){
-		this.color=color;
-		setX(x);
-		setY(y);
-		setWidth(size);
-		setHeight(size);
-		image=new Image(new SpriteDrawable().tint(color));
-		image.setBounds(x, y, size, size);
-	}
-	
-	@Override
-	public void act(float delta){
-		image.act(delta);
-	}
-	
-	@Override
-	public void draw(Batch batch, float parentAlpha){
-		image.draw(batch, parentAlpha);
+	public static TextureRegionDrawable black=new TextureRegionDrawable(new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "black.jpg"))));
+	public static TextureRegionDrawable white=new TextureRegionDrawable(new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "white.jpg"))));
+
+	public BAWFMapBlock(Color color, float x, float y, float size) {
+		if (color.equals(Color.BLACK))
+			setDrawable(black);
+		else if (color.equals(Color.WHITE))
+			setDrawable(white);
+		else
+			throw new IllegalArgumentException("Color must be black or white.");
+
+		setScaling(Scaling.stretch);
+		setAlign(Align.center);
+		setBounds(x, y, size, size);
 	}
 }
