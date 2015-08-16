@@ -1,0 +1,2 @@
+"%JAVA_HOME%\bin\jarsigner.exe" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore key.keystore BlackAndWhiteForest-android.apk key.keystore -storepass 123456
+"%JAVA_HOME%\bin\jarsigner.exe" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore key.keystore BlackAndWhiteForest-desktop.jar key.keystore -storepass 123456
