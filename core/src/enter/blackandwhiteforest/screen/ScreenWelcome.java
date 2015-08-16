@@ -26,6 +26,8 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 	@Override
 	public void show() {
 		totalDelta = 0;
+		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
+		BlackAndWhiteForest.stage.addAction(alpha);
 		BlackAndWhiteForest.stage.addActor(icon);
 	}
 
