@@ -8,15 +8,11 @@ import enter.blackandwhiteforest.screen.ScreenSettings;
 import enter.blackandwhiteforest.screen.ScreenWelcome;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Properties;
 import java.util.Random;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -32,16 +28,17 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 /**
  * <p>
- * 感谢 <a href="libgdx.badlogicgames.com">libGDX</a> 和
- * <a href="http://blog.sina.com.cn/weyingkj">奋斗小土豆丶</a>
+ * I wish to express my most sincere thanks for
+ * <a href="libgdx.badlogicgames.com">libGDX</a> and
+ * <a href="http://blog.sina.com.cn/weyingkj">Potato</a>
  * </p>
  * <p>
- * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/3.0/">
- * <img alt= "知识共享许可协议" style="border-width:0" src=
- * "https://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />
- * 本作品采用
- * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/3.0/">
- * 知识共享署名-非商业性使用- 相同方式共享 3.0 国际许可协议</a>进行许可。
+ * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/4.0/">
+ * <img alt= "Creative Commons License" style="border-width:0" src=
+ * "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />
+ * This work is licensed under a
+ * <a rel="license" href= "http://creativecommons.org/licenses/by-nc-sa/4.0/">
+ * Creative Commons Attribution 4.0 International License</a>.
  * <hr/>
  * </p>
  * 
@@ -187,20 +184,19 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			try {
 				URL url = jars[i].file().toURI().toURL();
 				URLClassLoader loader = new URLClassLoader(new URL[] { url });
-				File file = new File(jars[i].file().getAbsolutePath() + ".xml");
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document document = db.parse(file);
-				NodeList nodeList = document.getElementsByTagName("*");
-				for (int i1 = 0; i1 < nodeList.getLength(); i1++) {
-					if (nodeList.item(i1).getNodeName().equals("mainClassName")) {
-						String className = nodeList.item(i1).getChildNodes().item(0).getNodeValue();
+				File file = new File(jars[i].file().getAbsolutePath() + ".properties");
+				Properties props = new Properties();
+				if (file.exists()) {
+					props.load(new FileInputStream(file));
+					String className = props.getProperty("mainClass", "");
+					if (className != "" || className != null) {
 						Class<?> aClass = loader.loadClass(className);
 						Class<?>[] interfaces = aClass.getInterfaces();
 						for (int j = 0; j < interfaces.length; j++) {
 							if (interfaces[j].getName().equals(IBAWFPlugin.class.getName())) {
 								IBAWFPlugin instance = (IBAWFPlugin) aClass.newInstance();
 								instance.init();
+								break;
 							}
 						}
 					}
@@ -216,7 +212,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	@Override
 	public void render() {
 		super.render();
-		Gdx.gl.glClearColor((float) (FI - 1), (float) (FI - 1), (float) (FI - 1), 1);
+		Gdx.gl.glClearColor((float) (2 - FI), (float) (2 - FI), (float) (2 - FI), 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();
 		stage.draw();
