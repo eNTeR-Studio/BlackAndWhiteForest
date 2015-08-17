@@ -80,6 +80,10 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static ScreenGaming gaming;
 
 	public static Sound click1, click2, click3;
+	
+	public static ClassLoader loader;
+	/*public static FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Desktop) ? Gdx.files.local("plugins/")
+			: Gdx.files.external("BlackAndWhiteForest/plugins/");*/
 
 	public static enum ResourceType {
 		texture, sound, music
@@ -183,7 +187,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		for (int i = 0; i < jars.length; i++) {
 			try {
 				URL url = jars[i].file().toURI().toURL();
-				URLClassLoader loader = new URLClassLoader(new URL[] { url });
+				if(loader==null)loader=new URLClassLoader(new URL[] { url });
 				File file = new File(jars[i].file().getAbsolutePath() + ".properties");
 				Properties props = new Properties();
 				if (file.exists()) {
@@ -201,7 +205,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 						}
 					}
 				}
-				loader.close();
+				//loader.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;
