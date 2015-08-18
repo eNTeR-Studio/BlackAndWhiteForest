@@ -12,11 +12,15 @@ import enter.blackandwhiteforest.BlackAndWhiteForest;
 import enter.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 
 public class BAWFMapBlock extends Image {
-	
-	public static TextureRegionDrawable black=new TextureRegionDrawable(new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "black.jpg"))));
-	public static TextureRegionDrawable white=new TextureRegionDrawable(new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "white.jpg"))));
 
-	public BAWFMapBlock(Color color, float x, float y, float size) {
+	public static TextureRegionDrawable black = new TextureRegionDrawable(
+			new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "black.jpg"))));
+	public static TextureRegionDrawable white = new TextureRegionDrawable(
+			new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "white.jpg"))));
+	public BAWFPlayer player;
+	public int blockX, blockY;
+
+	public BAWFMapBlock(Color color, float pixelX, float pixalY, float size, int x, int y) {
 		if (color.equals(Color.BLACK))
 			setDrawable(black);
 		else if (color.equals(Color.WHITE))
@@ -26,6 +30,8 @@ public class BAWFMapBlock extends Image {
 
 		setScaling(Scaling.stretch);
 		setAlign(Align.center);
-		setBounds(x, y, size, size);
+		setBounds(pixelX, pixalY, size, size);
+		blockX = x;
+		blockY = y;
 	}
 }
