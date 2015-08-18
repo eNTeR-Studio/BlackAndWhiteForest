@@ -31,7 +31,7 @@ public class BAWFMap {
 				else
 					isWhite = false;
 				blocks[i][j] = new BAWFMapBlock((isWhite ? Color.WHITE : Color.BLACK), i * pixalsPerBlock + edgeWidth,
-						j * pixalsPerBlock + edgeHeight, pixalsPerBlock);
+						j * pixalsPerBlock + edgeHeight, pixalsPerBlock, i + 1, j + 1);
 				BlackAndWhiteForest.stage.addActor(blocks[i][j]);
 			}
 		}

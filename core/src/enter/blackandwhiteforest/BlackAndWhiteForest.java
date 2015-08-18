@@ -9,12 +9,14 @@ import enter.blackandwhiteforest.screen.ScreenWelcome;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Properties;
 import java.util.Random;
 
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -81,9 +83,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	public static Sound click1, click2, click3;
 	
-	public static ClassLoader loader;
-	/*public static FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Desktop) ? Gdx.files.local("plugins/")
-			: Gdx.files.external("BlackAndWhiteForest/plugins/");*/
+	public static IPluginClassLoader iLoader;
+	//public static File optimizedDirectory;
 
 	public static enum ResourceType {
 		texture, sound, music
@@ -139,8 +140,64 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			throw new IllegalArgumentException("Type can't be null.");
 		}
 	}
+	
+	public static interface IPluginClassLoader{
+		ClassLoader getClassLoader(File... files)throws Exception;
+	}
 
 	private BlackAndWhiteForest() {
+	}
+	
+	private void loadPlugin(String suffix){
+		FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Desktop) ? Gdx.files.local("plugins/")
+				: Gdx.files.external("BlackAndWhiteForest/plugins/");
+		if (!pluginFolder.exists())
+			pluginFolder.mkdirs();
+		FileHandle[] files = pluginFolder.list(suffix);
+		for (int i = 0; i < files.length; i++) {
+			try {
+				File jarFile = files[i].file();
+				if(iLoader==null)iLoader=new IPluginClassLoader() {
+					@Override
+					public ClassLoader getClassLoader(File... files) throws MalformedURLException {
+						//Only for desktop.
+						return new URLClassLoader(new URL[] { files[0].toURI().toURL() });
+					}
+				};
+				ClassLoader loader =iLoader.getClassLoader(jarFile/*,optimizedDirectory*/);
+				File propsFile = new File(files[i].file().getAbsolutePath() + ".properties");
+				Properties props = new Properties();
+				if (propsFile.exists()) {
+					props.load(new FileInputStream(propsFile));
+					String className = props.getProperty("mainClass", "");
+					if (className != "" || className != null) {
+						Class<?> aClass = loader.loadClass(className);
+						Class<?>[] interfaces = aClass.getInterfaces();
+						for (int j = 0; j < interfaces.length; j++) {
+							if (interfaces[j].getName().equals(IBAWFPlugin.class.getName())) {
+								IBAWFPlugin instance = (IBAWFPlugin) aClass.newInstance();
+								instance.init();
+								break;
+							}
+						}
+					}
+				}
+				//loader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Gdx.input.getTextInput(new TextInputListener() {
+					@Override
+					public void input(String text) {
+
+					}
+					@Override
+					public void canceled() {
+
+					}
+				}, "Error!", e.getMessage(), "");
+				continue;
+			}
+		}
 	}
 
 	@Override
@@ -178,39 +235,11 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		gaming.init();
 
 		Gdx.input.setInputProcessor(stage);
-
-		FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Desktop) ? Gdx.files.local("plugins/")
-				: Gdx.files.external("BlackAndWhiteForest/plugins/");
-		if (!pluginFolder.exists())
-			pluginFolder.mkdirs();
-		FileHandle[] jars = pluginFolder.list(".jar");
-		for (int i = 0; i < jars.length; i++) {
-			try {
-				URL url = jars[i].file().toURI().toURL();
-				if(loader==null)loader=new URLClassLoader(new URL[] { url });
-				File file = new File(jars[i].file().getAbsolutePath() + ".properties");
-				Properties props = new Properties();
-				if (file.exists()) {
-					props.load(new FileInputStream(file));
-					String className = props.getProperty("mainClass", "");
-					if (className != "" || className != null) {
-						Class<?> aClass = loader.loadClass(className);
-						Class<?>[] interfaces = aClass.getInterfaces();
-						for (int j = 0; j < interfaces.length; j++) {
-							if (interfaces[j].getName().equals(IBAWFPlugin.class.getName())) {
-								IBAWFPlugin instance = (IBAWFPlugin) aClass.newInstance();
-								instance.init();
-								break;
-							}
-						}
-					}
-				}
-				//loader.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-				continue;
-			}
-		}
+		
+		//optimizedDirectory=Gdx.files.external("BlackAndWhiteForest/plugins/dex/").file();
+		//if(!optimizedDirectory.exists())optimizedDirectory.mkdirs();
+		loadPlugin(".jar");
+		if(Gdx.app.getType().equals(ApplicationType.Android))loadPlugin(".dex");
 	}
 
 	@Override
