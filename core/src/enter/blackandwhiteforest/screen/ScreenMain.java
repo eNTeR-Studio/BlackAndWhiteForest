@@ -103,7 +103,7 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 
 	@Override
 	public void resume() {
-
+		init();
 	}
 
 	@Override
