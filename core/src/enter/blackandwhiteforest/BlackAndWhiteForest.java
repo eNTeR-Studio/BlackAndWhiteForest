@@ -6,7 +6,7 @@ import enter.blackandwhiteforest.screen.ScreenGaming;
 import enter.blackandwhiteforest.screen.ScreenMain;
 import enter.blackandwhiteforest.screen.ScreenSettings;
 import enter.blackandwhiteforest.screen.ScreenWelcome;
-
+import enter.blackandwhiteforest.util.BAWFCrashHandler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
@@ -16,15 +16,22 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
@@ -61,14 +68,18 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static final BAWFEventBus BAWF_EVENT_BUS = new BAWFEventBus();
 	public static final Random ran = new Random();
 
+	// public static FreeTypeFontGenerator generator;
+
 	public static SpriteBatch batch;
 	public static Stage stage;
 	public static ScalingViewport viewport;
 	public static OrthographicCamera camera;
 	// public static Sprite sprite;
+	public static Skin skin = new Skin();
 
 	public static float totalDelta, delta;
 	public static int width, height;
+	public static boolean doesRender = true;
 
 	/*
 	 * public static int initTime = 0; public static final int MAX_INIT_TIME =
@@ -81,13 +92,13 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static ScreenSettings settings;
 	public static ScreenGaming gaming;
 
-	public static Sound click1, click2, click3;
-	
+	public static Sound click1, click2, click3, click4;
+
 	public static IPluginClassLoader iLoader;
-	//public static File optimizedDirectory;
+	// public static File optimizedDirectory;
 
 	public static enum ResourceType {
-		texture, sound, music
+		texture, sound, music, data
 	}
 
 	public static FileHandle getPath(ResourceType type, String fileName) throws IllegalArgumentException {
@@ -98,6 +109,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			return Gdx.files.internal("sounds/" + fileName);
 		case music:
 			return Gdx.files.internal("musics/" + fileName);
+		case data:
+			return Gdx.files.internal("data/" + fileName);
 		default:
 			throw new IllegalArgumentException("Type can't be null.");
 		}
@@ -115,12 +128,14 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		switch (type) {
 		case click:
 			switch (ran.nextInt(4)) {
-			case 1:
+			case 0:
 				return click1.play(volume);
-			case 2:
+			case 1:
 				return click2.play(volume);
-			case 3:
+			case 2:
 				return click3.play(volume);
+			case 3:
+				return click4.play(volume);
 			default:
 				return playSound(SoundType.click);
 			}
@@ -140,37 +155,48 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			throw new IllegalArgumentException("Type can't be null.");
 		}
 	}
-	
-	public static interface IPluginClassLoader{
-		ClassLoader getClassLoader(File... files)throws Exception;
+
+	public static TextureRegionDrawable getDrawable(String fileName) {
+		return new TextureRegionDrawable(new TextureRegion(new Texture(getPath(ResourceType.texture, fileName))));
+	}
+
+	public static interface IPluginClassLoader {
+		ClassLoader getClassLoader(File... files) throws Exception;
 	}
 
 	private BlackAndWhiteForest() {
 	}
-	
-	private void loadPlugin(String suffix){
-		FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Desktop) ? Gdx.files.local("plugins/")
-				: Gdx.files.external("BlackAndWhiteForest/plugins/");
+
+	private void loadPlugin(String suffix) {
+		FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Android)
+				? Gdx.files.external("BlackAndWhiteForest/plugins/") : Gdx.files.local("plugins/");
 		if (!pluginFolder.exists())
 			pluginFolder.mkdirs();
 		FileHandle[] files = pluginFolder.list(suffix);
 		for (int i = 0; i < files.length; i++) {
 			try {
 				File jarFile = files[i].file();
-				if(iLoader==null)iLoader=new IPluginClassLoader() {
-					@Override
-					public ClassLoader getClassLoader(File... files) throws MalformedURLException {
-						//Only for desktop.
-						return new URLClassLoader(new URL[] { files[0].toURI().toURL() });
-					}
-				};
-				ClassLoader loader =iLoader.getClassLoader(jarFile/*,optimizedDirectory*/);
+				if (iLoader == null)
+					iLoader = new IPluginClassLoader() {
+						@Override
+						public ClassLoader getClassLoader(File... files) throws MalformedURLException {
+							// Only for desktop.
+							return new URLClassLoader(new URL[] { files[0].toURI().toURL() });
+						}
+					};
+				ClassLoader loader = iLoader.getClassLoader(jarFile/* ,optimizedDirectory */);
 				File propsFile = new File(files[i].file().getAbsolutePath() + ".properties");
 				Properties props = new Properties();
 				if (propsFile.exists()) {
 					props.load(new FileInputStream(propsFile));
 					String className = props.getProperty("mainClass", "");
 					if (className != "" || className != null) {
+						/*
+						 * Method findClass=loader.getClass().getDeclaredMethod(
+						 * "findClass", String.class);
+						 * findClass.setAccessible(true); Class<?> aClass =
+						 * (Class<?>) (findClass.invoke(loader, className));
+						 */
 						Class<?> aClass = loader.loadClass(className);
 						Class<?>[] interfaces = aClass.getInterfaces();
 						for (int j = 0; j < interfaces.length; j++) {
@@ -182,19 +208,9 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 						}
 					}
 				}
-				//loader.close();
+				// loader.close();
 			} catch (Exception e) {
-				e.printStackTrace();
-				Gdx.input.getTextInput(new TextInputListener() {
-					@Override
-					public void input(String text) {
-
-					}
-					@Override
-					public void canceled() {
-
-					}
-				}, "Error!", e.getMessage(), "");
+				BAWFCrashHandler.handleCrash(e);
 				continue;
 			}
 		}
@@ -210,6 +226,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		click1 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "click.mp3"));
 		click2 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "hat.mp3"));
 		click3 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "ignite.mp3"));
+		click4 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "click.wav"));
 
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(width, height);
@@ -227,6 +244,16 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		settings = new ScreenSettings();
 		gaming = new ScreenGaming();
 
+		skin = new Skin();
+		WindowStyle windowStyle = new WindowStyle(new BitmapFont(), Color.BLACK, getDrawable("dialogBackground.png"));
+		skin.add("default", windowStyle);
+		LabelStyle labelStyle = new LabelStyle(new BitmapFont(), Color.WHITE);
+		skin.add("default", labelStyle);
+		// TextButtonStyle buttonStyle = new
+		// TextButtonStyle(getDrawable("ok.png"),getDrawable("okClicked.png"),null,
+		// new BitmapFont());
+		// skin.add("default", buttonStyle);
+
 		init();
 		welcome.init();
 		setScreen(welcome);
@@ -235,21 +262,26 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		gaming.init();
 
 		Gdx.input.setInputProcessor(stage);
-		
-		//optimizedDirectory=Gdx.files.external("BlackAndWhiteForest/plugins/dex/").file();
-		//if(!optimizedDirectory.exists())optimizedDirectory.mkdirs();
+
+		// optimizedDirectory=Gdx.files.external("BlackAndWhiteForest/plugins/dex/").file();
+		// if(!optimizedDirectory.exists())optimizedDirectory.mkdirs();
 		loadPlugin(".jar");
-		if(Gdx.app.getType().equals(ApplicationType.Android))loadPlugin(".dex");
+		if (Gdx.app.getType().equals(ApplicationType.Android))
+			loadPlugin(".dex");
+
+		BAWFCrashHandler.handleCrash(new RuntimeException("Just a test. Hehe..."));
 	}
 
 	@Override
 	public void render() {
-		super.render();
-		Gdx.gl.glClearColor((float) (2 - FI), (float) (2 - FI), (float) (2 - FI), 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act();
-		stage.draw();
-		delta = Gdx.graphics.getDeltaTime();
-		totalDelta += delta;
+		if (doesRender) {
+			super.render();
+			Gdx.gl.glClearColor((float) (2 - FI), (float) (2 - FI), (float) (2 - FI), 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			stage.act();
+			stage.draw();
+			delta = Gdx.graphics.getDeltaTime();
+			totalDelta += delta;
+		}
 	}
 }

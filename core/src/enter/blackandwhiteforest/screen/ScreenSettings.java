@@ -66,11 +66,12 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 						public void input(String text) {
 
 						}
+
 						@Override
 						public void canceled() {
 
 						}
-					}, "title", "", "");
+					}, "User Feedback", "", "");
 				}
 				return true;
 			}

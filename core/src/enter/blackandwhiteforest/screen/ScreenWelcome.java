@@ -62,7 +62,7 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 
 	@Override
 	public void resume() {
-
+		init();
 	}
 
 	@Override
