@@ -70,6 +70,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	// public static FreeTypeFontGenerator generator;
 
+	public static boolean isDebug = true;
+
 	public static SpriteBatch batch;
 	public static Stage stage;
 	public static ScalingViewport viewport;
@@ -233,7 +235,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		camera.position.set(camera.viewportWidth / 2F, camera.viewportHeight / 2F, 0);
 		viewport = new ScalingViewport(Scaling.stretch, width, height, camera);
 		stage = new Stage(viewport, batch);
-		stage.setDebugAll(true);
+		stage.setDebugAll(isDebug);
 		// initTime++;
 	}
 
@@ -255,11 +257,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		// skin.add("default", buttonStyle);
 
 		init();
-		welcome.init();
 		setScreen(welcome);
-		main.init();
-		settings.init();
-		gaming.init();
 
 		Gdx.input.setInputProcessor(stage);
 
@@ -268,8 +266,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		loadPlugin(".jar");
 		if (Gdx.app.getType().equals(ApplicationType.Android))
 			loadPlugin(".dex");
-
-		BAWFCrashHandler.handleCrash(new RuntimeException("Just a test. Hehe..."));
 	}
 
 	@Override
