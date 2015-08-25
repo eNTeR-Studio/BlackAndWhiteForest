@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class ScreenWelcome implements Screen, IBAWFPlugin {
 
-	public static Image icon;
+	public Image icon;
 	public static float totalDelta = 0F;
 	public static boolean hasBlockAdded = false;
 	public static boolean hasShown = false;
@@ -20,11 +20,12 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 	public void init() {
 		icon = new Image(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "icon.png")));
 		icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
-		//BlackAndWhiteForest.initTime++;
+		// BlackAndWhiteForest.initTime++;
 	}
 
 	@Override
 	public void show() {
+		init();
 		totalDelta = 0;
 		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
 		BlackAndWhiteForest.stage.addAction(alpha);
@@ -72,8 +73,7 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 
 	@Override
 	public void dispose() {
-		icon=null;
-		System.gc();
+
 	}
 
 }
