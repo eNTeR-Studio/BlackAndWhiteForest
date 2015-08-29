@@ -77,6 +77,9 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 
 	@Override
 	public void render(float delta) {
+		buttonStart.setBounds(BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F,
+				BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F);
+		buttonSettings.setBounds(0, 0, BlackAndWhiteForest.width / 5F, BlackAndWhiteForest.height / 5F);
 		if (hasSettingsClicked) {
 			if (!hasActionAdded) {
 				AlphaAction alpha = Actions.fadeOut((float) (Math.PI - Math.E));
@@ -96,7 +99,8 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 
 	@Override
 	public void resize(int width, int height) {
-
+		buttonStart.setBounds(width / 3F, height / 3F, width / 3F, height / 3F);
+		buttonSettings.setBounds(0, 0, width / 5F, height / 5F);
 	}
 
 	@Override
