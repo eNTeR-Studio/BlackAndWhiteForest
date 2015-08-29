@@ -27,6 +27,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -94,7 +95,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static ScreenSettings settings;
 	public static ScreenGaming gaming;
 
-	public static Sound click1, click2, click3, click4;
+	public static Sound[] click = new Sound[4];
+	public static FreeTypeFontGenerator fontGenerator;
 
 	public static IPluginClassLoader iLoader;
 	// public static File optimizedDirectory;
@@ -129,18 +131,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static long playSound(SoundType type, float volume) throws IllegalArgumentException {
 		switch (type) {
 		case click:
-			switch (ran.nextInt(4)) {
-			case 0:
-				return click1.play(volume);
-			case 1:
-				return click2.play(volume);
-			case 2:
-				return click3.play(volume);
-			case 3:
-				return click4.play(volume);
-			default:
-				return playSound(SoundType.click);
-			}
+			return click[ran.nextInt(click.length)].play(volume);
 		default:
 			throw new IllegalArgumentException("Type can't be null.");
 		}
@@ -225,10 +216,15 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 
-		click1 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "click.mp3"));
-		click2 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "hat.mp3"));
-		click3 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "ignite.mp3"));
-		click4 = Gdx.audio.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "click.wav"));
+		fontGenerator = new FreeTypeFontGenerator(getPath(ResourceType.data, "SourceHanSansCN-Normal.ttf"));
+		click[0] = Gdx.audio
+				.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "202312__7778__dbl-click-edited.mp3"));
+		click[1] = Gdx.audio
+				.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "213004__agaxly__clicking-2-edited.mp3"));
+		click[2] = Gdx.audio
+				.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "219068__annabloom__click2-edited.mp3"));
+		click[3] = Gdx.audio
+				.newSound(BlackAndWhiteForest.getPath(ResourceType.sound, "256116__kwahmah-02__click-edited.mp3"));
 
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(width, height);
@@ -270,8 +266,11 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	@Override
 	public void render() {
+		camera.setToOrtho(false, width, height);
 		if (doesRender) {
 			super.render();
+			width = Gdx.graphics.getWidth();
+			height = Gdx.graphics.getHeight();
 			Gdx.gl.glClearColor((float) (2 - FI), (float) (2 - FI), (float) (2 - FI), 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
@@ -279,5 +278,11 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			delta = Gdx.graphics.getDeltaTime();
 			totalDelta += delta;
 		}
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		camera.setToOrtho(false, width, height);
 	}
 }
