@@ -286,6 +286,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		camera.setToOrtho(false, width, height);
+		//camera.setToOrtho(false, width, height);
 	}
 }
