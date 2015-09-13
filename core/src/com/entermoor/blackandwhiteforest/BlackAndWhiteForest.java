@@ -5,10 +5,17 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Net.HttpMethods;
+import com.badlogic.gdx.Net.HttpRequest;
+import com.badlogic.gdx.Net.HttpResponse;
+import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -21,6 +28,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.net.HttpRequestBuilder;
+import com.badlogic.gdx.net.HttpRequestHeader;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -34,6 +43,7 @@ import com.entermoor.blackandwhiteforest.screen.ScreenGaming;
 import com.entermoor.blackandwhiteforest.screen.ScreenMain;
 import com.entermoor.blackandwhiteforest.screen.ScreenSettings;
 import com.entermoor.blackandwhiteforest.screen.ScreenWelcome;
+import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 
 /**
@@ -100,6 +110,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	public static IPluginClassLoader iLoader;
 	// public static File optimizedDirectory;
+	
+	public static String contactInfo;
 
 	public static enum ResourceType {
 		texture, sound, music, data
@@ -152,9 +164,54 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static TextureRegionDrawable getDrawable(String fileName) {
 		return new TextureRegionDrawable(new TextureRegion(new Texture(getPath(ResourceType.texture, fileName))));
 	}
+	
+	public static void feedback(Map<String,String> map){
+		HttpRequestBuilder requestBuilder = new HttpRequestBuilder().newRequest().method(HttpMethods.POST)
+				.url("https://api.leancloud.cn/1.1/feedback")
+				.header("X-AVOSCloud-Application-Id", "6v9rp1ndzdl5zbv9uiqjlzeex4v7gv2kh7hawtw02kft5ccd")
+				.header("X-AVOSCloud-Application-Key", "jlgcq1xbr6op5f5yuyj304x7iu6ee4b70tfei0dtzoghjxgv");
+		writeJson(requestBuilder, map);
+		HttpRequest httpRequest = requestBuilder.build();
+		System.out.println(httpRequest.getContent());
+
+		Gdx.net.sendHttpRequest(httpRequest, new HttpResponseListener() {
+
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				System.out.println(httpResponse.getResultAsString());
+			}
+
+			@Override
+			public void failed(Throwable t) {
+				t.printStackTrace();
+			}
+
+			@Override
+			public void cancelled() {
+
+			}
+		});
+	}
 
 	public static interface IPluginClassLoader {
 		ClassLoader getClassLoader(File... files) throws Exception;
+	}
+	
+	public static void writeJson(HttpRequestBuilder requestBuilder, Map<String, String> map) {
+		requestBuilder.header(HttpRequestHeader.ContentType, "application/json");
+		StringBuilder content = new StringBuilder(200);
+		content.append("{");
+		for (Iterator<Entry<String, String>> iterator = map.entrySet().iterator(); iterator.hasNext();) {
+			Entry<String, String> current = iterator.next();
+			content.append(current.getKey());
+			content.append(":");
+			content.append(current.getValue());
+			if (iterator.hasNext())
+				content.append(",");
+			else
+				content.append("}");
+		}
+		requestBuilder.content(content.toString());
 	}
 
 	private BlackAndWhiteForest() {
@@ -238,7 +295,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	@Override
 	public void create() {
 		
-		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
+		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, false);
 		
 		welcome = new ScreenWelcome();
 		main = new ScreenMain();
@@ -254,6 +311,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		// TextButtonStyle(getDrawable("ok.png"),getDrawable("okClicked.png"),null,
 		// new BitmapFont());
 		// skin.add("default", buttonStyle);
+		contactInfo = BAWFConfig.get("ContactInfo");
 
 		init();
 		setScreen(welcome);
