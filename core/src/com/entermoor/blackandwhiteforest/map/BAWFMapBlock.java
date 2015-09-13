@@ -16,6 +16,7 @@ public class BAWFMapBlock extends Image {
 			new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "black.jpg"))));
 	public static TextureRegionDrawable white = new TextureRegionDrawable(
 			new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "white.jpg"))));
+	
 	public BAWFPlayer player;
 	public int blockX, blockY;
 

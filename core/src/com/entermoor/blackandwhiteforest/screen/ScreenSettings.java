@@ -1,5 +1,8 @@
 package com.entermoor.blackandwhiteforest.screen;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.TextInputListener;
@@ -16,6 +19,7 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
+import com.entermoor.blackandwhiteforest.util.BAWFTranslator;
 
 public class ScreenSettings implements Screen, IBAWFPlugin {
 
@@ -42,7 +46,29 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 				Gdx.input.getTextInput(new TextInputListener() {
 					@Override
 					public void input(String text) {
+						Map<String, String> contentMap = new HashMap<String, String>();
+						contentMap.put("\"status\"", "\"open\"");
+						contentMap.put("\"content\"", "\"" + text + "\"");
 
+						if (BlackAndWhiteForest.contactInfo == null) {
+
+							Gdx.input.getTextInput(new TextInputListener() {
+
+								@Override
+								public void input(String text) {
+									BlackAndWhiteForest.contactInfo=text;
+								}
+
+								@Override
+								public void canceled() {
+									BlackAndWhiteForest.contactInfo="";
+								}
+								
+							}, BAWFTranslator.get("We need more information to contact you !"), "", "");
+
+						}
+						contentMap.put("\"contact\"", "\"" +BlackAndWhiteForest.contactInfo+ "\"");
+						BlackAndWhiteForest.feedback(contentMap);
 					}
 
 					@Override

@@ -5,18 +5,16 @@ import java.util.Properties;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-public class BAWFConfigHandler {
+public class BAWFConfig {
 
-	public static Properties config;
+	public static Properties config = new Properties();
 
 	static {
 		try {
-			if (config == null) {
-				FileHandle configFile = Gdx.files.local("BAWFConfig.properties");
-				if (!configFile.exists())
-					configFile.file().createNewFile();
-				config.load(configFile.read());
-			}
+			FileHandle configFile = Gdx.files.local("BAWFConfig.properties");
+			if (!configFile.exists())
+				configFile.file().createNewFile();
+			config.load(configFile.read());
 		} catch (Exception e) {
 			BAWFCrashHandler.handleCrash(e);
 		}
@@ -32,4 +30,7 @@ public class BAWFConfigHandler {
 		}
 	}
 
+	public static String get(String key) {
+		return config.getProperty(key, null);
+	}
 }

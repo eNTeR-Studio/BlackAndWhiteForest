@@ -5,6 +5,10 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 
 public class ScreenGaming implements Screen, IBAWFPlugin {
+	
+	public void init() {
+		//BlackAndWhiteForest.initTime++;
+	}
 
 	@Override
 	public void show() {
@@ -41,9 +45,4 @@ public class ScreenGaming implements Screen, IBAWFPlugin {
 	public void dispose() {
 
 	}
-
-	public void init() {
-		//BlackAndWhiteForest.initTime++;
-	}
-
 }

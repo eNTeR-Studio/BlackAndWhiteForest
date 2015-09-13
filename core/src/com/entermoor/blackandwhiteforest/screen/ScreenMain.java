@@ -25,6 +25,9 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 		@Override
 		public boolean handle(Event event) {
 			if (event instanceof InputEvent && ((InputEvent) event).getType().equals(InputEvent.Type.touchUp)) {
+				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.gaming);
+				BlackAndWhiteForest.stage.clear();
+				BlackAndWhiteForest.stage.getBatch().flush();
 				BAWFMap.INSTANCE.load();
 			}
 			return true;
