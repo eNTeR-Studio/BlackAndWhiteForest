@@ -110,7 +110,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	public static IPluginClassLoader iLoader;
 	// public static File optimizedDirectory;
-	
+
 	public static String contactInfo;
 
 	public static enum ResourceType {
@@ -164,8 +164,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static TextureRegionDrawable getDrawable(String fileName) {
 		return new TextureRegionDrawable(new TextureRegion(new Texture(getPath(ResourceType.texture, fileName))));
 	}
-	
-	public static void feedback(Map<String,String> map){
+
+	public static void feedback(Map<String, String> map) {
 		HttpRequestBuilder requestBuilder = new HttpRequestBuilder().newRequest().method(HttpMethods.POST)
 				.url("https://api.leancloud.cn/1.1/feedback")
 				.header("X-AVOSCloud-Application-Id", "6v9rp1ndzdl5zbv9uiqjlzeex4v7gv2kh7hawtw02kft5ccd")
@@ -196,7 +196,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static interface IPluginClassLoader {
 		ClassLoader getClassLoader(File... files) throws Exception;
 	}
-	
+
 	public static void writeJson(HttpRequestBuilder requestBuilder, Map<String, String> map) {
 		requestBuilder.header(HttpRequestHeader.ContentType, "application/json");
 		StringBuilder content = new StringBuilder(200);
@@ -212,6 +212,11 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 				content.append("}");
 		}
 		requestBuilder.content(content.toString());
+	}
+
+	public static FileHandle getSavePath(String fileName) {
+		return Gdx.app.getType().equals(ApplicationType.Android) ? Gdx.files.external("BlackAndWhiteForest/" + fileName)
+				: Gdx.files.local(fileName);
 	}
 
 	private BlackAndWhiteForest() {
@@ -294,9 +299,10 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	@Override
 	public void create() {
-		
-		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, false);
-		
+
+		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
+				Gdx.graphics.getDesktopDisplayMode().height, false);
+
 		welcome = new ScreenWelcome();
 		main = new ScreenMain();
 		settings = new ScreenSettings();
@@ -344,6 +350,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		//camera.setToOrtho(false, width, height);
+		// camera.setToOrtho(false, width, height);
 	}
 }

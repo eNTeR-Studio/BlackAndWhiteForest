@@ -1,15 +1,27 @@
 package com.entermoor.blackandwhiteforest.map;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class BAWFPlayer extends Image{
+public class BAWFPlayer {
 	
-	public BAWFMapBlock currentMapBlock;
+	public static enum BAWFPlayerShape{
+		circle,rectangle
+	}
 	
-	public BAWFPlayer(BAWFMapBlock block,Color color){
-		Circle circle;
+	public Color color;
+	public BAWFPlayerShape shape;
+	public BAWFMapBlock block;
+	
+	public BAWFPlayer(Color color, BAWFPlayerShape shape, BAWFMapBlock block){
+		this.color=color;
+		this.shape=shape;
+		this.block=block;
+	}
+	
+	public void draw() {
+		if(shape==BAWFPlayerShape.circle){
+			block.pixmap.drawCircle(block.pixmap.getHeight()/2, block.pixmap.getHeight()/2, (int) (block.getHeight()/Math.PI));
+		}
 	}
 	
 }

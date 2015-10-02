@@ -40,6 +40,7 @@ public class BAWFMap {
 				BlackAndWhiteForest.stage.addActor(blocks[i][j]);
 			}
 		}
+		blocks[0][0].setPlayer(new BAWFPlayer(new Color(255,255,255,0), BAWFPlayer.BAWFPlayerShape.circle, blocks[0][0]));
 	}
 	
 	public void load(FileHandle file) {

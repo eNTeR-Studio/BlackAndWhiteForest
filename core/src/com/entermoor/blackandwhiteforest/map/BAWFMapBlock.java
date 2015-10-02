@@ -17,9 +17,11 @@ public class BAWFMapBlock extends Image {
 	public static TextureRegionDrawable white = new TextureRegionDrawable(
 			new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "white.jpg"))));*/
 
-	public BAWFPlayer player;
+	//public BAWFPlayer player;
 	public int blockX, blockY;
 	public Pixmap pixmap;
+	
+	protected BAWFPlayer player;
 
 	public BAWFMapBlock(Color color, float pixelX, float pixalY, float size, int x, int y) {
 		/*
@@ -37,5 +39,18 @@ public class BAWFMapBlock extends Image {
 		setBounds(pixelX, pixalY, size, size);
 		blockX = x;
 		blockY = y;
+	}
+	
+	public BAWFPlayer getPlayer(){
+		return player;
+	}
+	
+	public void setPlayer(BAWFPlayer player){
+		this.player=player;
+		if(player==null){
+			pixmap.fill();
+		}else{
+			player.draw();
+		}
 	}
 }
