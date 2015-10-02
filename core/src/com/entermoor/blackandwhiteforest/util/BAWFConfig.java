@@ -2,9 +2,8 @@ package com.entermoor.blackandwhiteforest.util;
 
 import java.util.Properties;
 
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 
 public class BAWFConfig {
 
@@ -12,7 +11,7 @@ public class BAWFConfig {
 
 	static {
 		try {
-			FileHandle configFile = Gdx.app.getType().equals(ApplicationType.Android)?Gdx.files.external("BlackAndWhiteForest/BAWFConfig.properties"):Gdx.files.local("BAWFConfig.properties");
+			FileHandle configFile = BlackAndWhiteForest.getSavePath("BAWFConfig.properties");
 			if (!configFile.exists())
 				configFile.file().createNewFile();
 			config.load(configFile.read());

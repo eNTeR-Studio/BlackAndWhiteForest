@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
@@ -37,15 +35,12 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 		@Override
 		public boolean handle(Event event) {
 			if (event instanceof InputEvent && ((InputEvent) event).getType().equals(InputEvent.Type.touchUp)) {
-				hasSettingsClicked = true;
+				BlackAndWhiteForest.INSTANSE.setScreen(new ScreenLoading(BlackAndWhiteForest.settings));
 				BlackAndWhiteForest.playSound(SoundType.click);
 			}
 			return true;
 		}
 	};
-
-	public static boolean hasActionAdded = false;
-	public static float totalDelta = 0;
 
 	public void init() {
 		startUp = new TextureRegionDrawable(
@@ -70,9 +65,6 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 	@Override
 	public void show() {
 		init();
-		totalDelta = 0;
-		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
-		BlackAndWhiteForest.stage.addAction(alpha);
 		BlackAndWhiteForest.stage.addActor(buttonStart);
 		BlackAndWhiteForest.stage.addActor(buttonSettings);
 	}
@@ -82,21 +74,6 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 		buttonStart.setBounds(BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F,
 				BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F);
 		buttonSettings.setBounds(0, 0, BlackAndWhiteForest.width / 5F, BlackAndWhiteForest.height / 5F);
-		if (hasSettingsClicked) {
-			if (!hasActionAdded) {
-				AlphaAction alpha = Actions.fadeOut((float) (Math.PI - Math.E));
-				BlackAndWhiteForest.stage.addAction(alpha);
-				hasActionAdded = true;
-			}
-			if (totalDelta >= (Math.PI - Math.E)) {
-				hasActionAdded = false;
-				hasSettingsClicked = false;
-				BlackAndWhiteForest.stage.clear();
-				BlackAndWhiteForest.stage.getBatch().flush();
-				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.settings);
-			}
-			totalDelta += delta;
-		}
 	}
 
 	@Override

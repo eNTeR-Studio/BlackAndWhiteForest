@@ -33,21 +33,7 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 
 	@Override
 	public void render(float delta) {
-		if (BlackAndWhiteForest.totalDelta > BlackAndWhiteForest.FI) {
-			if (!hasBlockAdded) {
-				AlphaAction alpha = Actions.fadeOut((float) (Math.PI - Math.E));
-				BlackAndWhiteForest.stage.addAction(alpha);
-				hasBlockAdded = true;
-			} else {
-				totalDelta += delta;
-			}
-			if (totalDelta >= (Math.PI - Math.E)) {
-				BlackAndWhiteForest.stage.clear();
-				BlackAndWhiteForest.stage.getBatch().flush();
-				dispose();
-				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.main);
-			}
-		}
+		BlackAndWhiteForest.INSTANSE.setScreen(new ScreenLoading((float)BlackAndWhiteForest.FI, BlackAndWhiteForest.main));
 	}
 
 	@Override

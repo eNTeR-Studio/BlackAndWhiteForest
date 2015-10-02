@@ -25,14 +25,11 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 
 	public ImageButton buttonBack, buttonFeedback;
 	public TextureRegionDrawable backUp, backDown, feedbackUp, feedbackDown;
-	public static boolean hasBackClicked = false;
-	public static boolean hasActionAdded = false;
-	public static float totalDelta = 0;
 	public static EventListener backListener = new EventListener() {
 		@Override
 		public boolean handle(Event event) {
 			if (event instanceof InputEvent && ((InputEvent) event).getType().equals(InputEvent.Type.touchUp)) {
-				hasBackClicked = true;
+				BlackAndWhiteForest.INSTANSE.setScreen(new ScreenLoading(BlackAndWhiteForest.main));
 				BlackAndWhiteForest.playSound(SoundType.click);
 			}
 			return true;
@@ -110,7 +107,6 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 	@Override
 	public void show() {
 		init();
-		totalDelta = 0;
 		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
 		BlackAndWhiteForest.stage.addAction(alpha);
 		BlackAndWhiteForest.stage.addActor(buttonBack);
@@ -119,21 +115,7 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 
 	@Override
 	public void render(float delta) {
-		if (hasBackClicked) {
-			if (!hasActionAdded) {
-				AlphaAction alpha = Actions.fadeOut((float) (Math.PI - Math.E));
-				BlackAndWhiteForest.stage.addAction(alpha);
-				hasActionAdded = true;
-			}
-			if (totalDelta >= (Math.PI - Math.E)) {
-				hasActionAdded = false;
-				hasBackClicked = false;
-				BlackAndWhiteForest.stage.clear();
-				BlackAndWhiteForest.stage.getBatch().flush();
-				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.main);
-			}
-			totalDelta += delta;
-		}
+
 	}
 
 	@Override
