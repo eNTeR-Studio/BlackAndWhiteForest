@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
+import com.entermoor.blackandwhiteforest.map.BAWFPlayer.BAWFPlayerShape;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 
 public class BAWFMap {
@@ -17,13 +18,14 @@ public class BAWFMap {
 	public BAWFMapBlock[][] blocks;
 	public int countX, countY;
 	public float edgeWidth, edgeHeight;
+	public BAWFPlayer player[];
 
 	private BAWFMap() {
 	}
 
 	public void load() {
 		System.out.println("Map is loading.");
-		edgeWidth = (BlackAndWhiteForest.width % pixalsPerBlock) / 2;
+		edgeWidth = (BlackAndWhiteForest.width % pixalsPerBlock) / 2 + BlackAndWhiteForest.width / 30;
 		edgeHeight = (BlackAndWhiteForest.height % pixalsPerBlock) / 2 + BlackAndWhiteForest.height / 15;
 		countX = (int) ((BlackAndWhiteForest.width - edgeWidth * 2) / pixalsPerBlock);
 		countY = (int) ((BlackAndWhiteForest.height - edgeHeight * 2) / pixalsPerBlock);
@@ -40,15 +42,16 @@ public class BAWFMap {
 				BlackAndWhiteForest.stage.addActor(blocks[i][j]);
 			}
 		}
-		blocks[0][0].setPlayer(new BAWFPlayer(new Color(255,255,255,0), BAWFPlayer.BAWFPlayerShape.circle, blocks[0][0]));
+		player[0]=new BAWFPlayer(Color.BLACK, BAWFPlayerShape.circle, 0, 0);
 	}
-	
+
 	public void load(FileHandle file) {
-		if(!file.exists())load();
+		if (!file.exists())
+			load();
 		try {
-			ObjectInputStream ois=new ObjectInputStream(new FileInputStream(file.file()));
-			
-		} catch (Exception e){
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file.file()));
+
+		} catch (Exception e) {
 			BAWFCrashHandler.handleCrash(e);
 		}
 	}
