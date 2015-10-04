@@ -20,8 +20,6 @@ public class BAWFMapBlock extends Image {
 	//public BAWFPlayer player;
 	public int blockX, blockY;
 	public Pixmap pixmap;
-	
-	protected BAWFPlayer player;
 
 	public BAWFMapBlock(Color color, float pixelX, float pixalY, float size, int x, int y) {
 		/*
@@ -32,6 +30,7 @@ public class BAWFMapBlock extends Image {
 
 		pixmap = new Pixmap((int) size, (int) size, Format.RGBA8888);
 		pixmap.setColor(color);
+		setColor(color);
 		pixmap.fill();
 		setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(pixmap))));
 		setScaling(Scaling.stretch);
@@ -39,18 +38,5 @@ public class BAWFMapBlock extends Image {
 		setBounds(pixelX, pixalY, size, size);
 		blockX = x;
 		blockY = y;
-	}
-	
-	public BAWFPlayer getPlayer(){
-		return player;
-	}
-	
-	public void setPlayer(BAWFPlayer player){
-		this.player=player;
-		if(player==null){
-			pixmap.fill();
-		}else{
-			player.draw();
-		}
 	}
 }
