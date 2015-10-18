@@ -120,7 +120,7 @@ public class BAWFPlayer extends Image {
 		super.act(delta);
 		size = (float) (BAWFMap.pixalsPerBlock / Math.E);
 		if (map.player[map.currentPlayerId] == this) {
-			if(listener.refresh())
+			if (listener != null && listener.refresh())
 				map.nextPlayer();
 			for (MovementPackage movementPackage : todoList) {
 				blockX += movementPackage.transverse;
