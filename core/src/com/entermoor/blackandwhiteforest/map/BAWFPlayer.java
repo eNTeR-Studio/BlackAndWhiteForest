@@ -1,5 +1,8 @@
 package com.entermoor.blackandwhiteforest.map;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,16 +12,81 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.entermoor.blackandwhiteforest.api.IBAWFPlayerMovementListener;
 
 public class BAWFPlayer extends Image {
+
+	public static float size = (float) (BAWFMap.pixalsPerBlock / Math.E);
+	public static BAWFMap map = BAWFMap.INSTANCE;
 
 	public static enum BAWFPlayerShape {
 		circle, rectangle
 	}
 
+	public static class MovementPackage {
+
+		public int transverse;
+		public int longitudinal;
+
+		public MovementPackage() {
+		}
+
+		/** @deprecated */
+		public MovementPackage(int transverse, int longitudinal) {
+			this.transverse = transverse;
+			this.longitudinal = longitudinal;
+		}
+
+		public MovementPackage left() {
+			return left(1);
+		}
+
+		public MovementPackage left(int count) {
+			transverse -= count;
+			return this;
+		}
+
+		public MovementPackage right() {
+			return right(1);
+		}
+
+		public MovementPackage right(int count) {
+			transverse += count;
+			return this;
+		}
+
+		public MovementPackage up() {
+			return up(1);
+		}
+
+		public MovementPackage up(int count) {
+			longitudinal += count;
+			return this;
+		}
+
+		public MovementPackage down() {
+			return down(1);
+		}
+
+		public MovementPackage down(int count) {
+			longitudinal -= count;
+			return this;
+		}
+	}
+
+	public static float realX(int blockX) {
+		return (float) (BAWFMap.INSTANCE.edgeWidth + BAWFMap.pixalsPerBlock * (blockX + 0.5 - 1 / (2 * Math.E)));
+	}
+
+	public static float realY(int blockY) {
+		return (float) (BAWFMap.INSTANCE.edgeWidth + BAWFMap.pixalsPerBlock * (blockY + 0.5 - 1 / (2 * Math.E)));
+	}
+
 	public Color color;
 	public BAWFPlayerShape shape;
 	public int blockX, blockY;
+	public List<MovementPackage> todoList = new LinkedList<MovementPackage>();
+	public IBAWFPlayerMovementListener listener;
 
 	public BAWFPlayer(Color color, BAWFPlayerShape shape, int x, int y) {
 		this.color = color;
@@ -30,36 +98,40 @@ public class BAWFPlayer extends Image {
 		pixmap.setColor(color);
 		switch (shape) {
 		case circle:
-			pixmap.drawCircle((int) (BAWFMap.pixalsPerBlock / Math.E / 2), (int) (BAWFMap.pixalsPerBlock / Math.E / 2),
+			pixmap.fillCircle((int) (BAWFMap.pixalsPerBlock / Math.E / 2), (int) (BAWFMap.pixalsPerBlock / Math.E / 2),
 					(int) (BAWFMap.pixalsPerBlock / Math.E / 2));
 			break;
 		case rectangle:
-			pixmap.drawRectangle((int) (BAWFMap.pixalsPerBlock / Math.E / 4),
-					(int) (BAWFMap.pixalsPerBlock / Math.E / 4), (int) (BAWFMap.pixalsPerBlock / Math.E / 2),
-					(int) (BAWFMap.pixalsPerBlock / Math.E / 2));
+			pixmap.fill();
 			break;
 		}
 		setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(pixmap))));
 		setScaling(Scaling.stretch);
 		setAlign(Align.center);
-		float realX = (float) (BAWFMap.INSTANCE.edgeWidth + BAWFMap.pixalsPerBlock * (x + 0.5 - 1 / (2 * Math.E)));
-		float realY = (float) (BAWFMap.INSTANCE.edgeHeight + BAWFMap.pixalsPerBlock * (y + 0.5 - 1 / (2 * Math.E)));
-		setBounds(realX, realY, (float) (BAWFMap.pixalsPerBlock / Math.E), (float) (BAWFMap.pixalsPerBlock / Math.E));
+		// float realX = (float) (BAWFMap.INSTANCE.edgeWidth +
+		// BAWFMap.pixalsPerBlock * (x + 0.5 - 1 / (2 * Math.E)));
+		// float realY = (float) (BAWFMap.INSTANCE.edgeHeight +
+		// BAWFMap.pixalsPerBlock * (y + 0.5 - 1 / (2 * Math.E)));
+		setBounds();
 	}
 
-	/*
-	 * public void draw() { if (shape == BAWFPlayerShape.circle) {
-	 * block.pixmap.setColor(color);
-	 * block.pixmap.drawCircle(block.pixmap.getWidth() / 2,
-	 * block.pixmap.getHeight() / 2, (int) (block.getHeight() / Math.PI));
-	 * block.pixmap.setColor(block.getColor()); } if (shape ==
-	 * BAWFPlayerShape.rectangle) { block.pixmap.setColor(color);
-	 * block.pixmap.drawRectangle(block.pixmap.getWidth() / 2,
-	 * block.pixmap.getHeight() / 2, (int) (block.getWidth() / Math.PI), (int)
-	 * (block.getHeight() / Math.PI)); block.pixmap.setColor(block.getColor());
-	 * } // BlackAndWhiteForest.batch.begin(); //
-	 * block.draw(BlackAndWhiteForest.batch, 0.0F); //
-	 * BlackAndWhiteForest.batch.end(); BlackAndWhiteForest.batch.flush(); }
-	 */
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		size = (float) (BAWFMap.pixalsPerBlock / Math.E);
+		if (map.player[map.currentPlayerId] == this) {
+			if(listener.refresh())
+				map.nextPlayer();
+			for (MovementPackage movementPackage : todoList) {
+				blockX += movementPackage.transverse;
+				blockY += movementPackage.longitudinal;
+			}
+		}
+		setBounds();
+	}
+
+	public void setBounds() {
+		setBounds(realX(blockX), realY(blockY), size, size);
+	}
 
 }
