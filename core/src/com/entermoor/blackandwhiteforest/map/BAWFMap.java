@@ -19,12 +19,12 @@ public class BAWFMap {
 	public int countX, countY;
 	public float edgeWidth, edgeHeight;
 	public BAWFPlayer player[]=new BAWFPlayer[2];
+	public int currentPlayerId=0;
 
 	private BAWFMap() {
 	}
 
 	public void load() {
-		System.out.println("Map is loading.");
 		edgeWidth = (BlackAndWhiteForest.width % pixalsPerBlock) / 2 + BlackAndWhiteForest.width / 30;
 		edgeHeight = (BlackAndWhiteForest.height % pixalsPerBlock) / 2 + BlackAndWhiteForest.height / 15;
 		countX = (int) ((BlackAndWhiteForest.width - edgeWidth * 2) / pixalsPerBlock);
@@ -42,7 +42,7 @@ public class BAWFMap {
 				BlackAndWhiteForest.stage.addActor(blocks[i][j]);
 			}
 		}
-		player[0]=new BAWFPlayer(Color.GREEN, BAWFPlayerShape.circle, 0, 0);
+		player[0]=new BAWFPlayer(Color.BLACK, BAWFPlayerShape.circle, 0, 0);
 		BlackAndWhiteForest.stage.addActor(player[0]);
 	}
 
@@ -54,6 +54,12 @@ public class BAWFMap {
 
 		} catch (Exception e) {
 			BAWFCrashHandler.handleCrash(e);
+		}
+	}
+	
+	public void nextPlayer(){
+		if(++currentPlayerId>=player.length){
+			currentPlayerId=0;
 		}
 	}
 }
