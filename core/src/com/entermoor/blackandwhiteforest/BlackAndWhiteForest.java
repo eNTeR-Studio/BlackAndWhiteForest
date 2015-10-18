@@ -18,6 +18,8 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -103,6 +105,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	public static IPluginClassLoader iLoader;
 	// public static File optimizedDirectory;
+	public static InputMultiplexer multiplexer = new InputMultiplexer();
 
 	public static String contactInfo;
 
@@ -211,6 +214,11 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		return Gdx.app.getType().equals(ApplicationType.Android) ? Gdx.files.external("BlackAndWhiteForest/" + fileName)
 				: Gdx.files.local(fileName);
 	}
+	
+	public static void addProcessor(InputProcessor inputProcessor){
+		multiplexer.addProcessor(inputProcessor);
+		Gdx.input.setInputProcessor(multiplexer);
+	}
 
 	private BlackAndWhiteForest() {
 	}
@@ -315,7 +323,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		init();
 		setScreen(welcome);
 
-		Gdx.input.setInputProcessor(stage);
+		addProcessor(stage);
 
 		// optimizedDirectory=Gdx.files.external("BlackAndWhiteForest/plugins/dex/").file();
 		// if(!optimizedDirectory.exists())optimizedDirectory.mkdirs();
