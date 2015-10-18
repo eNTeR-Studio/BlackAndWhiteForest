@@ -18,7 +18,7 @@ public class BAWFMap {
 	public BAWFMapBlock[][] blocks;
 	public int countX, countY;
 	public float edgeWidth, edgeHeight;
-	public BAWFPlayer player[];
+	public BAWFPlayer player[]=new BAWFPlayer[2];
 
 	private BAWFMap() {
 	}
@@ -42,7 +42,8 @@ public class BAWFMap {
 				BlackAndWhiteForest.stage.addActor(blocks[i][j]);
 			}
 		}
-		player[0]=new BAWFPlayer(Color.BLACK, BAWFPlayerShape.circle, 0, 0);
+		player[0]=new BAWFPlayer(Color.GREEN, BAWFPlayerShape.circle, 0, 0);
+		BlackAndWhiteForest.stage.addActor(player[0]);
 	}
 
 	public void load(FileHandle file) {
