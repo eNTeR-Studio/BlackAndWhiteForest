@@ -65,14 +65,7 @@ import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
  * @author fxzjshm
  */
 public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
-	/*
-	 * Command: keytool -genkey -v -keystore key.keystore -alias key.keystore
-	 * -keyalg RSA -keysize 2048 -validity 1000000. Password: 123456 Name: eNTeR
-	 * Organization: eNTeR_studio City: haimen Province: jiangsu Country: CN
-	 * 
-	 * Info:CN=eNTeR, OU=eNTeR_studio, O=eNTeR_studio, L=haimen, ST=jiangsu,
-	 * C=CN
-	 */
+
 	public static final double FI = (Math.sqrt(5) + 1) / 2;
 
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
