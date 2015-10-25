@@ -88,7 +88,7 @@ public class BAWFPlayer extends Image {
 	public List<MovementPackage> todoList = new LinkedList<MovementPackage>();
 	public IBAWFPlayerMovementListener listener;
 
-	public BAWFPlayer(Color color, BAWFPlayerShape shape, int x, int y) {
+	public BAWFPlayer(Color color, BAWFPlayerShape shape, int x, int y, IBAWFPlayerMovementListener movementListener) {
 		this.color = color;
 		this.shape = shape;
 		blockX = x;
@@ -113,6 +113,7 @@ public class BAWFPlayer extends Image {
 		// float realY = (float) (BAWFMap.INSTANCE.edgeHeight +
 		// BAWFMap.pixalsPerBlock * (y + 0.5 - 1 / (2 * Math.E)));
 		setBounds();
+		listener = movementListener;
 	}
 
 	@Override
@@ -120,17 +121,24 @@ public class BAWFPlayer extends Image {
 		super.act(delta);
 		size = (float) (BAWFMap.pixalsPerBlock / Math.E);
 		if (map.player[map.currentPlayerId] == this) {
-			if (listener != null && listener.refresh())
+			if (listener != null && listener.refresh(this))
 				map.nextPlayer();
-			for (MovementPackage movementPackage : todoList) {
-				blockX += movementPackage.transverse;
-				blockY += movementPackage.longitudinal;
-			}
+				for (MovementPackage movementPackage : todoList) {
+					blockX += movementPackage.transverse;
+					blockY += movementPackage.longitudinal;
+					todoList.remove(movementPackage);
+				}
 		}
 		setBounds();
 	}
 
 	public void setBounds() {
+		if (blockX < 0)
+			blockX = 0;
+		if (blockY < 0)
+			blockY = 0;
+		if(blockX>map.countX-1)blockX=map.countX-1;
+		if(blockY>map.countY-1)blockY=map.countY-1;
 		setBounds(realX(blockX), realY(blockY), size, size);
 	}
 
