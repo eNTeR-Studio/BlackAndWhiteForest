@@ -1,4 +1,4 @@
 #org.springsource.ide.eclipse.gradle.core.preferences.GradleProjectPreferences
-#Mon Aug 17 22:45:12 CST 2015
-build.family.org.gradle.tooling.model.eclipse.HierarchicalEclipseProject=;android;core;desktop;ios;
+#Sun Oct 25 18:04:15 CST 2015
+build.family.org.gradle.tooling.model.eclipse.HierarchicalEclipseProject=;android;core;desktop;
 org.springsource.ide.eclipse.gradle.rootprojectloc=

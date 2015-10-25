@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.map.BAWFPlayer.BAWFPlayerShape;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
+import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
 
 public class BAWFMap {
 
@@ -18,7 +19,7 @@ public class BAWFMap {
 	public BAWFMapBlock[][] blocks;
 	public int countX, countY;
 	public float edgeWidth, edgeHeight;
-	public BAWFPlayer player[]=new BAWFPlayer[2];
+	public BAWFPlayer player[]=new BAWFPlayer[1];
 	public int currentPlayerId=0;
 
 	private BAWFMap() {
@@ -42,7 +43,7 @@ public class BAWFMap {
 				BlackAndWhiteForest.stage.addActor(blocks[i][j]);
 			}
 		}
-		player[0]=new BAWFPlayer(Color.BLACK, BAWFPlayerShape.circle, 0, 0);
+		player[0]=new BAWFPlayer(Color.BLACK, BAWFPlayerShape.circle, 0, 0,new HumanPlayerMovementListener());
 		BlackAndWhiteForest.stage.addActor(player[0]);
 	}
 
@@ -58,7 +59,8 @@ public class BAWFMap {
 	}
 	
 	public void nextPlayer(){
-		if(++currentPlayerId>=player.length){
+		currentPlayerId++;
+		if(currentPlayerId>=player.length){
 			currentPlayerId=0;
 		}
 	}

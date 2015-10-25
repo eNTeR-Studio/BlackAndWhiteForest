@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
-import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.map.BAWFMap;
@@ -41,21 +40,28 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 			return true;
 		}
 	};
+	
+	public ScreenMain(){
+		BlackAndWhiteForest.assetManager.load("textures/start.png", Texture.class);
+		BlackAndWhiteForest.assetManager.load("textures/startClicked.png", Texture.class);
+		BlackAndWhiteForest.assetManager.load("textures/settings.png", Texture.class);
+		BlackAndWhiteForest.assetManager.load("textures/settingsClicked.png", Texture.class);
+	}
 
 	public void init() {
 		startUp = new TextureRegionDrawable(
-				new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "start.png"))));
+				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/start.png")));
 		startDown = new TextureRegionDrawable(
-				new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "startClicked.png"))));
+				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/startClicked.png")));
 		buttonStart = new ImageButton(startUp, startDown);
 		buttonStart.setBounds(BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F,
 				BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F);
 		buttonStart.addListener(startListener);
 
 		settingsUp = new TextureRegionDrawable(
-				new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "settings.png"))));
+				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/settings.png")));
 		settingsDown = new TextureRegionDrawable(new TextureRegion(
-				new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "settingsClicked.png"))));
+				(Texture)BlackAndWhiteForest.assetManager.get("textures/settingsClicked.png")));
 		buttonSettings = new ImageButton(settingsUp, settingsDown);
 		buttonSettings.setBounds(0, 0, BlackAndWhiteForest.width / 5F, BlackAndWhiteForest.height / 5F);
 		buttonSettings.addListener(settingsListener);
