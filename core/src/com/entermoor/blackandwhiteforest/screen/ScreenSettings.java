@@ -48,7 +48,7 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 						contentMap.put("\"status\"", "\"open\"");
 						contentMap.put("\"content\"", "\"" + text + "\"");
 
-						if (BlackAndWhiteForest.contactInfo == null || BlackAndWhiteForest.contactInfo == "") {
+						if (BlackAndWhiteForest.contactInfo == null || BlackAndWhiteForest.contactInfo.equals("")) {
 
 							Gdx.input.getTextInput(new TextInputListener() {
 
