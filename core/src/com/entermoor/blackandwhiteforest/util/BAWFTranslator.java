@@ -21,11 +21,11 @@ public class BAWFTranslator {
 
 	public static String get(String key) {
 		String val = translator.get(key);
-		if (val == null) {
+		if (val == null || val.equals("")) {
 			BAWFCrashHandler.handleCrash(new RuntimeException(String.format("Can't find %s in %s", key, propFileName)));
 			if (!propFileName.equals("en_US.lang")) {
 				String val2 = translator_en_US.get(key);
-				if (val2 == null) {
+				if (val2 == null || val2.equals("")) {
 					BAWFCrashHandler.handleCrash(new RuntimeException(
 							String.format("Can't find %s in en_US.lang. It seems that there is no way...", key)));
 					return key;
