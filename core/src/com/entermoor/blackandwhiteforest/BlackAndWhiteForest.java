@@ -16,8 +16,6 @@ import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -32,7 +30,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
@@ -51,6 +48,7 @@ import com.entermoor.blackandwhiteforest.screen.ScreenGaming;
 import com.entermoor.blackandwhiteforest.screen.ScreenMain;
 import com.entermoor.blackandwhiteforest.screen.ScreenSettings;
 import com.entermoor.blackandwhiteforest.screen.ScreenWelcome;
+import com.entermoor.blackandwhiteforest.util.BAWFAssetManager;
 import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
@@ -85,7 +83,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	public static boolean isDebug = true;
 
-	public static AssetManager assetManager = new AssetManager();
+	public static BAWFAssetManager assetManager = new BAWFAssetManager();
 
 	public static SpriteBatch batch;
 	public static Stage stage;
@@ -299,10 +297,10 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			;
 
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/SourceHanSansCN-Normal.ttf"));
-		click[0] = assetManager.get("sounds/202312__7778__dbl-click-edited.mp3");
-		click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3");
-		click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3");
-		click[3] = assetManager.get("sounds/256116__kwahmah-02__click-edited.mp3");
+		click[0] = assetManager.get("sounds/202312__7778__dbl-click-edited.mp3", Sound.class);
+		click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
+		click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
+		click[3] = assetManager.get("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
 
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(width, height);
@@ -318,7 +316,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
 				Gdx.graphics.getDesktopDisplayMode().height, false);
-		
+
 		init();
 		welcome = new ScreenWelcome();
 		main = new ScreenMain();
@@ -328,7 +326,8 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		skin = new Skin();
 		while (!assetManager.update())
 			;
-		WindowStyle windowStyle = new WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(new TextureRegion((Texture)assetManager.get("textures/dialogBackground.png"))));
+		WindowStyle windowStyle = new WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(
+				new TextureRegion((Texture) assetManager.get("textures/dialogBackground.png", Texture.class))));
 		skin.add("default", windowStyle);
 		LabelStyle labelStyle = new LabelStyle(new BitmapFont(), Color.WHITE);
 		skin.add("default", labelStyle);
@@ -401,7 +400,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	@Override
 	public void render() {
-		if (assetManager.update()) {
+		//if (assetManager.update()) {
 			if (doesRender) {
 				super.render();
 				width = Gdx.graphics.getWidth();
@@ -413,7 +412,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 				delta = Gdx.graphics.getDeltaTime();
 				totalDelta += delta;
 			}
-		}
+		//}
 		camera.setToOrtho(false, width, height);
 	}
 
@@ -421,5 +420,12 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		// camera.setToOrtho(false, width, height);
+	}
+	
+	@Override
+	public void resume () {
+		super.resume();
+		String test="add code here.";
+		//assetManager.clear();
 	}
 }

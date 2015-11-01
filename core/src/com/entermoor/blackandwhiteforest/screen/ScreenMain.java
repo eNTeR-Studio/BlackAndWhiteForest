@@ -50,18 +50,18 @@ public class ScreenMain implements Screen, IBAWFPlugin {
 
 	public void init() {
 		startUp = new TextureRegionDrawable(
-				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/start.png")));
+				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/start.png",Texture.class)));
 		startDown = new TextureRegionDrawable(
-				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/startClicked.png")));
+				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/startClicked.png",Texture.class)));
 		buttonStart = new ImageButton(startUp, startDown);
 		buttonStart.setBounds(BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F,
 				BlackAndWhiteForest.width / 3F, BlackAndWhiteForest.height / 3F);
 		buttonStart.addListener(startListener);
 
 		settingsUp = new TextureRegionDrawable(
-				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/settings.png")));
+				new TextureRegion((Texture)BlackAndWhiteForest.assetManager.get("textures/settings.png",Texture.class)));
 		settingsDown = new TextureRegionDrawable(new TextureRegion(
-				(Texture)BlackAndWhiteForest.assetManager.get("textures/settingsClicked.png")));
+				(Texture)BlackAndWhiteForest.assetManager.get("textures/settingsClicked.png",Texture.class)));
 		buttonSettings = new ImageButton(settingsUp, settingsDown);
 		buttonSettings.setBounds(0, 0, BlackAndWhiteForest.width / 5F, BlackAndWhiteForest.height / 5F);
 		buttonSettings.addListener(settingsListener);
