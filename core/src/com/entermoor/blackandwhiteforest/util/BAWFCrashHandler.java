@@ -3,7 +3,6 @@ package com.entermoor.blackandwhiteforest.util;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -15,7 +14,7 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.screen.ScreenError;
 
 public class BAWFCrashHandler {
-	
+
 	public static void handleCrash(Throwable e) {
 		handleCrash(e, true);
 	}
@@ -63,37 +62,40 @@ public class BAWFCrashHandler {
 				errDialog.show(BlackAndWhiteForest.stage);
 				BlackAndWhiteForest.INSTANSE.setScreen(new ScreenError(BlackAndWhiteForest.INSTANSE.getScreen()));
 			}
-			/*if (Gdx.app.getType().equals(ApplicationType.Android)
-					|| Gdx.app.getType().equals(ApplicationType.Desktop)) {*/
-				/*
-				 * Socket socket = Gdx.net.newClientSocket(Net.Protocol.TCP,
-				 * "https://api.leancloud.cn/1.1/feedback", 80, null);
-				 */
+			/*
+			 * if (Gdx.app.getType().equals(ApplicationType.Android) ||
+			 * Gdx.app.getType().equals(ApplicationType.Desktop)) {
+			 */
+			/*
+			 * Socket socket = Gdx.net.newClientSocket(Net.Protocol.TCP,
+			 * "https://api.leancloud.cn/1.1/feedback", 80, null);
+			 */
 
-				Map<String, String> contentMap = new HashMap<String, String>();
-				contentMap.put("\"status\"", "\"open\"");
-				contentMap.put("\"content\"", "\"" + msgBuilder.toString() + "\"");
+			Map<String, String> contentMap = new HashMap<String, String>();
+			contentMap.put("\"status\"", "\"open\"");
+			contentMap.put("\"content\"", "\"" + msgBuilder.toString() + "\"");
+			/*String contactInfo = BAWFConfig.get("ContactInfo");
+			if (contactInfo == null || contactInfo.equals("")) {
 
-				if (BlackAndWhiteForest.contactInfo == null) {
+				Gdx.input.getTextInput(new TextInputListener() {
 
-					Gdx.input.getTextInput(new TextInputListener() {
+					@Override
+					public void input(String text) {
+						BAWFConfig.config.setProperty("ContactInfo", text);
+					}
 
-						@Override
-						public void input(String text) {
-							BlackAndWhiteForest.contactInfo=text;
-						}
+					@Override
+					public void canceled() {
 
-						@Override
-						public void canceled() {
-							BlackAndWhiteForest.contactInfo="";
-						}
-						
-					}, BAWFTranslator.get("We need more information to contact you !"), "", "");
+					}
 
-				}
-				contentMap.put("\"contact\"", "\"" +BlackAndWhiteForest.contactInfo+ "\"");
-				BlackAndWhiteForest.feedback(contentMap);
-			//}
+				}, BAWFTranslator.get("We need more information to contact you !"), "", "");
+
+			}
+			contactInfo = BAWFConfig.get("ContactInfo");*/
+			contentMap.put("\"contact\"", "\"\"");
+			BlackAndWhiteForest.feedback(contentMap);
+			// }
 		}
 	}
 }
