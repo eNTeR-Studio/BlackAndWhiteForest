@@ -19,6 +19,7 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
+import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 import com.entermoor.blackandwhiteforest.util.BAWFTranslator;
 
 public class ScreenSettings implements Screen, IBAWFPlugin {
@@ -46,25 +47,26 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 						Map<String, String> contentMap = new HashMap<String, String>();
 						contentMap.put("\"status\"", "\"open\"");
 						contentMap.put("\"content\"", "\"" + text + "\"");
-
-						if (BlackAndWhiteForest.contactInfo == null || BlackAndWhiteForest.contactInfo.equals("")) {
+						String contactInfo = BAWFConfig.get("ContactInfo");
+						if (contactInfo == null || contactInfo.equals("")) {
 
 							Gdx.input.getTextInput(new TextInputListener() {
 
 								@Override
 								public void input(String text) {
-									BlackAndWhiteForest.contactInfo=text;
+									BAWFConfig.config.setProperty("ContactInfo", text);
 								}
 
 								@Override
 								public void canceled() {
-									BlackAndWhiteForest.contactInfo="";
+
 								}
-								
+
 							}, BAWFTranslator.get("We need more information to contact you !"), "", "");
 
 						}
-						contentMap.put("\"contact\"", "\"" +BlackAndWhiteForest.contactInfo+ "\"");
+						contactInfo = BAWFConfig.get("ContactInfo");
+						contentMap.put("\"contact\"", "\"" + contactInfo + "\"");
 						BlackAndWhiteForest.feedback(contentMap);
 					}
 

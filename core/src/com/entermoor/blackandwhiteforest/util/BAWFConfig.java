@@ -1,12 +1,19 @@
 package com.entermoor.blackandwhiteforest.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 
+/**
+ * Key list:
+ * ContactInfo
+ * */
 public class BAWFConfig {
-
+	
 	public static Properties config = new Properties();
 
 	static {
@@ -32,5 +39,18 @@ public class BAWFConfig {
 
 	public static String get(String key) {
 		return config.getProperty(key, null);
+	}
+	
+	public static void set(String key, String value){
+		config.setProperty(key, value);
+		try {
+			config.store(new FileOutputStream(BlackAndWhiteForest.getSavePath("BAWFConfig.properties").file()), "The properties of BlackAndWhiteForest");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

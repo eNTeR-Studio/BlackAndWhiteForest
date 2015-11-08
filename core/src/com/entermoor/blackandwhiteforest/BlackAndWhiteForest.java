@@ -49,7 +49,6 @@ import com.entermoor.blackandwhiteforest.screen.ScreenMain;
 import com.entermoor.blackandwhiteforest.screen.ScreenSettings;
 import com.entermoor.blackandwhiteforest.screen.ScreenWelcome;
 import com.entermoor.blackandwhiteforest.util.BAWFAssetManager;
-import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
 
@@ -114,7 +113,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	// public static File optimizedDirectory;
 	public static InputMultiplexer multiplexer = new InputMultiplexer();
 
-	public static String contactInfo;
+	//public static String contactInfo;
 
 	public static enum ResourceType {
 		texture, sound, music, data
@@ -335,7 +334,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		// TextButtonStyle(getDrawable("ok.png"),getDrawable("okClicked.png"),null,
 		// new BitmapFont());
 		// skin.add("default", buttonStyle);
-		contactInfo = BAWFConfig.get("ContactInfo");
+		//contactInfo = BAWFConfig.get("ContactInfo");
 
 		setScreen(welcome);
 
@@ -425,7 +424,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	@Override
 	public void resume () {
 		super.resume();
-		String test="add code here.";
-		//assetManager.clear();
+		assetManager.resume();
 	}
 }
