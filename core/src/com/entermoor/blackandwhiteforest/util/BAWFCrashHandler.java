@@ -1,9 +1,12 @@
 package com.entermoor.blackandwhiteforest.util;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -97,5 +100,13 @@ public class BAWFCrashHandler {
 			BlackAndWhiteForest.feedback(contentMap);
 			// }
 		}
+		FileHandle crashLog=BlackAndWhiteForest.getSavePath(String.valueOf(new Date().getTime())+".txt");
+		try {
+			crashLog.file().createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		crashLog.writeString(msgBuilder.toString(), true);
 	}
 }

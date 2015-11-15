@@ -40,6 +40,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
@@ -90,6 +91,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static OrthographicCamera camera;
 	// public static Sprite sprite;
 	public static Skin skin = new Skin();
+	public static HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder();
 
 	public static float totalDelta, delta;
 	public static int width, height;
@@ -168,12 +170,11 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	}
 
 	public static void feedback(Map<String, String> map) {
-		HttpRequestBuilder requestBuilder = new HttpRequestBuilder().newRequest().method(HttpMethods.POST)
+		writeJson(httpRequestBuilder.newRequest().method(HttpMethods.POST)
 				.url("https://api.leancloud.cn/1.1/feedback")
-				.header("X-AVOSCloud-Application-Id", "6v9rp1ndzdl5zbv9uiqjlzeex4v7gv2kh7hawtw02kft5ccd")
-				.header("X-AVOSCloud-Application-Key", "jlgcq1xbr6op5f5yuyj304x7iu6ee4b70tfei0dtzoghjxgv");
-		writeJson(requestBuilder, map);
-		HttpRequest httpRequest = requestBuilder.build();
+				.header("X-LC-Id", "6v9rp1ndzdl5zbv9uiqjlzeex4v7gv2kh7hawtw02kft5ccd")
+				.header("X-LC-Key", "jlgcq1xbr6op5f5yuyj304x7iu6ee4b70tfei0dtzoghjxgv"), map);
+		final HttpRequest httpRequest = httpRequestBuilder.build();
 		System.out.println(httpRequest.getContent());
 
 		Gdx.net.sendHttpRequest(httpRequest, new HttpResponseListener() {
@@ -181,16 +182,18 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				System.out.println(httpResponse.getResultAsString());
+				Pools.free(httpRequest);
 			}
 
 			@Override
 			public void failed(Throwable t) {
-				t.printStackTrace();
+				BAWFCrashHandler.handleCrash(t);
+				Pools.free(httpRequest);
 			}
 
 			@Override
 			public void cancelled() {
-
+				Pools.free(httpRequest);
 			}
 		});
 	}
@@ -199,7 +202,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		ClassLoader getClassLoader(File... files) throws Exception;
 	}
 
-	public static void writeJson(HttpRequestBuilder requestBuilder, Map<String, String> map) {
+	public static HttpRequestBuilder writeJson(HttpRequestBuilder requestBuilder, Map<String, String> map) {
 		requestBuilder.header(HttpRequestHeader.ContentType, "application/json");
 		StringBuilder content = new StringBuilder(200);
 		content.append("{");
@@ -214,6 +217,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 				content.append("}");
 		}
 		requestBuilder.content(content.toString());
+		return requestBuilder;
 	}
 
 	public static FileHandle getSavePath(String fileName) {
@@ -312,6 +316,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 
 	@Override
 	public void create() {
+		try{
 
 		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
 				Gdx.graphics.getDesktopDisplayMode().height, false);
@@ -395,10 +400,14 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			}
 		}));
 		//////////
+		}catch(Throwable t){
+			BAWFCrashHandler.handleCrash(t);
+		}
 	}
 
 	@Override
 	public void render() {
+		try{
 		//if (assetManager.update()) {
 			if (doesRender) {
 				super.render();
@@ -413,6 +422,9 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			}
 		//}
 		camera.setToOrtho(false, width, height);
+		}catch(Throwable t){
+			BAWFCrashHandler.handleCrash(t);
+		}
 	}
 
 	@Override
