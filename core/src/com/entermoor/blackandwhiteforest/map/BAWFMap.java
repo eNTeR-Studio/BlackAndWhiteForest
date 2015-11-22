@@ -58,10 +58,16 @@ public class BAWFMap {
 		}
 	}
 	
+	public BAWFPlayer getCurrentPlayer(){
+		return player[currentPlayerId];
+	}
+	
 	public void nextPlayer(){
 		currentPlayerId++;
 		if(currentPlayerId>=player.length){
 			currentPlayerId=0;
 		}
 	}
+	
+	//public Entry<>
 }

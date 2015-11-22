@@ -18,6 +18,7 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
@@ -45,6 +46,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.event.BAWFEventBus;
+import com.entermoor.blackandwhiteforest.map.BAWFMap;
 import com.entermoor.blackandwhiteforest.screen.ScreenGaming;
 import com.entermoor.blackandwhiteforest.screen.ScreenMain;
 import com.entermoor.blackandwhiteforest.screen.ScreenSettings;
@@ -311,6 +313,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		viewport = new ScalingViewport(Scaling.stretch, width, height, camera);
 		stage = new Stage(viewport, batch);
 		stage.setDebugAll(isDebug);
+		camera.setToOrtho(false, width, height);
 		// initTime++;
 	}
 
@@ -394,12 +397,65 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 			public boolean fling(float velocityX, float velocityY, int button) {
 				// TODO Auto-generated method stub
 				System.out.println("velocityX: " + velocityX + ", velocityY: " + velocityY);
-				HumanPlayerMovementListener.velocityX = velocityX;
-				HumanPlayerMovementListener.velocityY = velocityY;
+				if(BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener){
+					HumanPlayerMovementListener listener=(HumanPlayerMovementListener)BAWFMap.INSTANCE.getCurrentPlayer().listener;
+					listener.velocityX = velocityX;
+					listener.velocityY = velocityY;
+				}
 				return false;
 			}
 		}));
 		//////////
+		addProcessor(new InputProcessor() {
+			
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+			
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				return false;
+			}
+			
+			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+			
+			@Override
+			public boolean scrolled(int amount) {
+				return false;
+			}
+			
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				return false;
+			}
+			
+			@Override
+			public boolean keyUp(int keycode) {
+				System.out.println(keycode);
+				if(BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener){
+					HumanPlayerMovementListener listener=(HumanPlayerMovementListener)BAWFMap.INSTANCE.getCurrentPlayer().listener;
+					if(keycode==Input.Keys.LEFT)listener.keyTypedX--;
+					if(keycode==Input.Keys.RIGHT)listener.keyTypedX++;
+					if(keycode==Input.Keys.UP)listener.keyTypedY--;
+					if(keycode==Input.Keys.DOWN)listener.keyTypedY++;
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean keyTyped(char character) {
+				return false;
+			}
+			
+			@Override
+			public boolean keyDown(int keycode) {
+				return false;
+			}
+		});
 		}catch(Throwable t){
 			BAWFCrashHandler.handleCrash(t);
 		}
@@ -408,8 +464,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	@Override
 	public void render() {
 		try{
-		//if (assetManager.update()) {
-			if (doesRender) {
 				super.render();
 				width = Gdx.graphics.getWidth();
 				height = Gdx.graphics.getHeight();
@@ -419,9 +473,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 				stage.draw();
 				delta = Gdx.graphics.getDeltaTime();
 				totalDelta += delta;
-			}
-		//}
-		camera.setToOrtho(false, width, height);
 		}catch(Throwable t){
 			BAWFCrashHandler.handleCrash(t);
 		}
@@ -436,6 +487,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	@Override
 	public void resume () {
 		super.resume();
-		assetManager.resume();
+		assetManager.finishLoading();
 	}
 }

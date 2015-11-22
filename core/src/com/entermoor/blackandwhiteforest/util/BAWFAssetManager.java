@@ -51,11 +51,4 @@ public class BAWFAssetManager extends AssetManager {
 		return super.get(fileName, type);
 	}
 
-	public void resume() {
-		clear();
-		for (Map.Entry<String, Class<?>> entry : resourcesMap.entrySet()) {
-			load(entry.getKey(), entry.getValue());
-		}
-	}
-
 }
