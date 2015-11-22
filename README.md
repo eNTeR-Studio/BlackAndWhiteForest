@@ -1,4 +1,5 @@
 # BlackAndWhiteForest #
+![](https://travis-ci.org/eNTeR-Studio/BlackAndWhiteForest.svg?branch=master)
 ----------
 
 ## Credits ##
