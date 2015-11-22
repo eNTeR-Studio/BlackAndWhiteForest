@@ -1,5 +1,13 @@
 language: android
 
+env:
+  global:
+    - ANDROID_HOME=${TRAVIS_BUILD_DIR}/android-sdk
+    - PATH=${ANDROID_HOME}/:${ANDROID_HOME}/tools/:${ANDROID_HOME}/platform-tools/:${PATH}
+
+before_install:
+  - cp -R /usr/local/android-sdk-22.0.1 ./android-sdk
+
 android:
   components:
     # Uncomment the lines below if you want to
