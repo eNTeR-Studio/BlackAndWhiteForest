@@ -9,22 +9,28 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 
-public class ScreenWelcome implements Screen, IBAWFPlugin {
+public class ScreenWelcome implements Screen {
 
-	public Image icon;
+	public static Image icon;
 	public static float totalDelta = 0F;
 	public static boolean hasBlockAdded = false;
 	public static boolean hasShown = false;
-
-	public void init() {
-		icon = new Image(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "icon.png")));
-		icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
-		// BlackAndWhiteForest.initTime++;
+	
+	static{
+		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin(){
+			
+			public void init() {
+				icon = new Image(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "icon.png")));
+				icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
+				// BlackAndWhiteForest.initTime++;
+			}
+			
+		});
 	}
 
 	@Override
 	public void show() {
-		init();
+		//init();
 		totalDelta = 0;
 		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
 		BlackAndWhiteForest.stage.addAction(alpha);
@@ -48,7 +54,7 @@ public class ScreenWelcome implements Screen, IBAWFPlugin {
 
 	@Override
 	public void resume() {
-		init();
+		//init();
 	}
 
 	@Override

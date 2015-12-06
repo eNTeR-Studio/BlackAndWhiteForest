@@ -67,3 +67,4 @@ build/
 lastest/key.keystore
 lastest/signjar.bat
 twig-1.0.2/
+desktop/*.txt

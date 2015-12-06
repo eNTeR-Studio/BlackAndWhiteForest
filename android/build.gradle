@@ -14,6 +14,19 @@ android {
 
         instrumentTest.setRoot('tests')
     }
+	signingConfigs {  
+        releaseConfig {  
+            keyAlias 'entermoor'  
+            keyPassword 'entermoor'  
+            storeFile file('key.keystore')  
+            storePassword 'entermoor'  
+        }  
+    }  
+	buildTypes {  
+        release {  
+            signingConfig signingConfigs.releaseConfig
+        }  
+    }  
 }
 
 

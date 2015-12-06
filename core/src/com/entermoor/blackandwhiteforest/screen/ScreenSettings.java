@@ -22,10 +22,14 @@ import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 import com.entermoor.blackandwhiteforest.util.BAWFTranslator;
 
-public class ScreenSettings implements Screen, IBAWFPlugin {
+public class ScreenSettings implements Screen {
 
-	public ImageButton buttonBack, buttonFeedback;
-	public TextureRegionDrawable backUp, backDown, feedbackUp, feedbackDown;
+	public static ImageButton buttonBack;
+	public static ImageButton buttonFeedback;
+	public static TextureRegionDrawable backUp;
+	public static TextureRegionDrawable backDown;
+	public static TextureRegionDrawable feedbackUp;
+	public static TextureRegionDrawable feedbackDown;
 	public static EventListener backListener = new EventListener() {
 		@Override
 		public boolean handle(Event event) {
@@ -80,35 +84,38 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 		}
 	};
 
-	public void init() {
-		backUp = new TextureRegionDrawable(
-				new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "back.png"))));
-		backUp.getRegion().setRegion(0, 0, backUp.getRegion().getRegionWidth() / 3 * 4,
-				backUp.getRegion().getRegionHeight());
-		backDown = new TextureRegionDrawable(
-				new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "backClicked.png"))));
-		backDown.getRegion().setRegion(0, 0, backDown.getRegion().getRegionWidth() / 3 * 4,
-				backDown.getRegion().getRegionHeight());
-		buttonBack = new ImageButton(backUp, backDown);
-		buttonBack.setBounds(0, (float) (BlackAndWhiteForest.height / 4F * 3F), BlackAndWhiteForest.width / 3F,
-				BlackAndWhiteForest.height / 5F);
-		buttonBack.addListener(backListener);
+	static {
+		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin() {
 
-		feedbackUp = new TextureRegionDrawable(
-				new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "feedback.png"))));
-		feedbackDown = new TextureRegionDrawable(new TextureRegion(
-				new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "feedbackClicked.png"))));
-		buttonFeedback = new ImageButton(feedbackUp, feedbackDown);
-		buttonFeedback.setBounds(BlackAndWhiteForest.width / 5F * 4F, BlackAndWhiteForest.height / 5F * 4F,
-				BlackAndWhiteForest.width / 5F, BlackAndWhiteForest.height / 5F);
-		buttonFeedback.addListener(feedbackListener);
+			@Override
+			public void init() {
+				backUp = new TextureRegionDrawable(
+						new TextureRegion(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "back.png"))));
+				backUp.getRegion().setRegion(0, 0, backUp.getRegion().getRegionWidth() / 3 * 4,
+						backUp.getRegion().getRegionHeight());
+				backDown = new TextureRegionDrawable(new TextureRegion(
+						new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "backClicked.png"))));
+				backDown.getRegion().setRegion(0, 0, backDown.getRegion().getRegionWidth() / 3 * 4,
+						backDown.getRegion().getRegionHeight());
+				buttonBack = new ImageButton(backUp, backDown);
+				buttonBack.setBounds(0, (float) (BlackAndWhiteForest.height / 4F * 3F), BlackAndWhiteForest.width / 3F,
+						BlackAndWhiteForest.height / 5F);
+				buttonBack.addListener(backListener);
 
-		// BlackAndWhiteForest.initTime++;
+				feedbackUp = new TextureRegionDrawable(new TextureRegion(
+						new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "feedback.png"))));
+				feedbackDown = new TextureRegionDrawable(new TextureRegion(
+						new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "feedbackClicked.png"))));
+				buttonFeedback = new ImageButton(feedbackUp, feedbackDown);
+				buttonFeedback.setBounds(BlackAndWhiteForest.width / 5F * 4F, BlackAndWhiteForest.height / 5F * 4F,
+						BlackAndWhiteForest.width / 5F, BlackAndWhiteForest.height / 5F);
+				buttonFeedback.addListener(feedbackListener);
+			}
+		});
 	}
 
 	@Override
 	public void show() {
-		init();
 		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
 		BlackAndWhiteForest.stage.addAction(alpha);
 		BlackAndWhiteForest.stage.addActor(buttonBack);
@@ -132,7 +139,6 @@ public class ScreenSettings implements Screen, IBAWFPlugin {
 
 	@Override
 	public void resume() {
-		init();
 	}
 
 	@Override

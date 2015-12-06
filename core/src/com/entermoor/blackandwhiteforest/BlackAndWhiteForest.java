@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -73,15 +75,14 @@ import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
  * 
  * @author fxzjshm
  */
-public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
+public class BlackAndWhiteForest extends Game {
 
 	public static final double FI = (Math.sqrt(5) + 1) / 2;
 
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
 	public static final BAWFEventBus BAWF_EVENT_BUS = new BAWFEventBus();
-	public static final Random ran = new Random();
-
-	// public static FreeTypeFontGenerator generator;
+	
+	public static List<IBAWFPlugin> toInitList=new ArrayList<IBAWFPlugin>();
 
 	public static boolean isDebug = true;
 
@@ -99,12 +100,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static int width, height;
 	public static boolean doesRender = true;
 
-	/*
-	 * public static int initTime = 0; public static final int MAX_INIT_TIME =
-	 * 5; public static Image progressBar; public static boolean doesLoad =
-	 * true;
-	 */
-
 	public static ScreenWelcome welcome;
 	public static ScreenMain main;
 	public static ScreenSettings settings;
@@ -114,10 +109,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static FreeTypeFontGenerator fontGenerator;
 
 	public static IPluginClassLoader iLoader;
-	// public static File optimizedDirectory;
 	public static InputMultiplexer multiplexer = new InputMultiplexer();
-
-	//public static String contactInfo;
 
 	public static enum ResourceType {
 		texture, sound, music, data
@@ -149,7 +141,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	public static long playSound(SoundType type, float volume) throws IllegalArgumentException {
 		switch (type) {
 		case click:
-			return click[ran.nextInt(click.length)].play(volume);
+			return click[new Random().nextInt(click.length)].play(volume);
 		default:
 			throw new IllegalArgumentException("Type can't be null.");
 		}
@@ -232,6 +224,42 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		Gdx.input.setInputProcessor(null);
 		Gdx.input.setInputProcessor(multiplexer);
 	}
+	
+	static{
+		toInitList.add(new IBAWFPlugin() {
+			
+			@Override
+			public void init() {
+				totalDelta = 0;
+				delta = 0;
+				width = Gdx.graphics.getWidth();
+				height = Gdx.graphics.getHeight();
+
+				assetManager.load("textures/dialogBackground.png", Texture.class);
+				assetManager.load("sounds/202312__7778__dbl-click-edited.mp3", Sound.class);
+				assetManager.load("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
+				assetManager.load("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
+				assetManager.load("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
+
+				while (!assetManager.update())
+					;
+
+				fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/SourceHanSansCN-Normal.ttf"));
+				click[0] = assetManager.get("sounds/202312__7778__dbl-click-edited.mp3", Sound.class);
+				click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
+				click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
+				click[3] = assetManager.get("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
+
+				batch = new SpriteBatch();
+				camera = new OrthographicCamera(width, height);
+				camera.position.set(camera.viewportWidth / 2F, camera.viewportHeight / 2F, 0);
+				viewport = new ScalingViewport(Scaling.stretch, width, height, camera);
+				stage = new Stage(viewport, batch);
+				stage.setDebugAll(isDebug);
+				camera.setToOrtho(false, width, height);
+			}
+		});
+	}
 
 	private BlackAndWhiteForest() {
 	}
@@ -260,12 +288,6 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 					props.load(new FileInputStream(propsFile));
 					String className = props.getProperty("mainClass", "");
 					if (className != "" || className != null) {
-						/*
-						 * Method findClass=loader.getClass().getDeclaredMethod(
-						 * "findClass", String.class);
-						 * findClass.setAccessible(true); Class<?> aClass =
-						 * (Class<?>) (findClass.invoke(loader, className));
-						 */
 						Class<?> aClass = loader.loadClass(className);
 						Class<?>[] interfaces = aClass.getInterfaces();
 						for (int j = 0; j < interfaces.length; j++) {
@@ -286,45 +308,12 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 	}
 
 	@Override
-	public void init() {
-		totalDelta = 0;
-		delta = 0;
-		width = Gdx.graphics.getWidth();
-		height = Gdx.graphics.getHeight();
-
-		assetManager.load("textures/dialogBackground.png", Texture.class);
-		assetManager.load("sounds/202312__7778__dbl-click-edited.mp3", Sound.class);
-		assetManager.load("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
-		assetManager.load("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
-		assetManager.load("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
-
-		while (!assetManager.update())
-			;
-
-		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/SourceHanSansCN-Normal.ttf"));
-		click[0] = assetManager.get("sounds/202312__7778__dbl-click-edited.mp3", Sound.class);
-		click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
-		click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
-		click[3] = assetManager.get("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
-
-		batch = new SpriteBatch();
-		camera = new OrthographicCamera(width, height);
-		camera.position.set(camera.viewportWidth / 2F, camera.viewportHeight / 2F, 0);
-		viewport = new ScalingViewport(Scaling.stretch, width, height, camera);
-		stage = new Stage(viewport, batch);
-		stage.setDebugAll(isDebug);
-		camera.setToOrtho(false, width, height);
-		// initTime++;
-	}
-
-	@Override
 	public void create() {
 		try{
 
 		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
 				Gdx.graphics.getDesktopDisplayMode().height, false);
 
-		init();
 		welcome = new ScreenWelcome();
 		main = new ScreenMain();
 		settings = new ScreenSettings();
@@ -338,18 +327,12 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		skin.add("default", windowStyle);
 		LabelStyle labelStyle = new LabelStyle(new BitmapFont(), Color.WHITE);
 		skin.add("default", labelStyle);
-		// TextButtonStyle buttonStyle = new
-		// TextButtonStyle(getDrawable("ok.png"),getDrawable("okClicked.png"),null,
-		// new BitmapFont());
-		// skin.add("default", buttonStyle);
-		//contactInfo = BAWFConfig.get("ContactInfo");
-
-		setScreen(welcome);
+		
+		for (IBAWFPlugin plugin : toInitList)
+			plugin.init();
 
 		addProcessor(stage);
-
-		// optimizedDirectory=Gdx.files.external("BlackAndWhiteForest/plugins/dex/").file();
-		// if(!optimizedDirectory.exists())optimizedDirectory.mkdirs();
+		
 		loadPlugin(".jar");
 		if (Gdx.app.getType().equals(ApplicationType.Android))
 			loadPlugin(".dex");
@@ -459,6 +442,7 @@ public class BlackAndWhiteForest extends Game implements IBAWFPlugin {
 		}catch(Throwable t){
 			BAWFCrashHandler.handleCrash(t);
 		}
+		setScreen(welcome);
 	}
 
 	@Override
