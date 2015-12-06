@@ -4,11 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 
-public class ScreenGaming implements Screen, IBAWFPlugin {
-	
-	public void init() {
-		//BlackAndWhiteForest.initTime++;
-	}
+public class ScreenGaming implements Screen {
 
 	@Override
 	public void show() {

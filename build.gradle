@@ -73,3 +73,20 @@ project(":core") {
 tasks.eclipse.doLast {
     delete ".project"
 }
+
+task buildAll(type: Copy, dependsOn: [android:assembleRelease, desktop:dist]) {
+ copy{
+  from('desktop/build/libs') {
+   include('desktop-1.0.jar')
+  }
+
+  into('lastest')
+ }
+  copy{
+  from('android/build/outputs/apk') {
+   include('android-release.apk')
+  }
+
+  into('lastest')
+ }
+}

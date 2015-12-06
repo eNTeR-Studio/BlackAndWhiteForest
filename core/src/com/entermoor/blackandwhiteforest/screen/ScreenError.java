@@ -3,16 +3,12 @@ package com.entermoor.blackandwhiteforest.screen;
 import com.badlogic.gdx.Screen;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 
-public class ScreenError implements Screen, IBAWFPlugin {
+public class ScreenError implements Screen {
 
 	public Screen lastScreen;
 
 	public ScreenError(Screen screen) {
 		lastScreen = screen;
-	}
-
-	@Override
-	public void init() {
 	}
 
 	@Override
