@@ -15,25 +15,15 @@ public class ScreenWelcome implements Screen {
 	public static float totalDelta = 0F;
 	public static boolean hasBlockAdded = false;
 	public static boolean hasShown = false;
-	
-	static{
-		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin(){
-			
-			public void init() {
-				icon = new Image(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "icon.png")));
-				icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
-				// BlackAndWhiteForest.initTime++;
-			}
-			
-		});
-	}
 
 	@Override
 	public void show() {
 		//init();
 		totalDelta = 0;
-		AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
-		BlackAndWhiteForest.stage.addAction(alpha);
+		icon = new Image(new Texture(BlackAndWhiteForest.getPath(ResourceType.texture, "icon.png")));
+		icon.setBounds(0, 0, BlackAndWhiteForest.width, BlackAndWhiteForest.height);
+		//AlphaAction alpha = Actions.fadeIn((float) (Math.PI - Math.E));
+		//BlackAndWhiteForest.stage.addAction(alpha);
 		BlackAndWhiteForest.stage.addActor(icon);
 	}
 
