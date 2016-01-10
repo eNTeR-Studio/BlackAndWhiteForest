@@ -244,7 +244,7 @@ public class BlackAndWhiteForest extends Game {
 				while (!assetManager.update())
 					;
 
-				fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/SourceHanSansCN-Normal.ttf"));
+				//fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/SourceHanSansCN-Normal.ttf"));
 				click[0] = assetManager.get("sounds/202312__7778__dbl-click-edited.mp3", Sound.class);
 				click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
 				click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
