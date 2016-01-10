@@ -81,8 +81,8 @@ public class BlackAndWhiteForest extends Game {
 
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
 	public static final BAWFEventBus BAWF_EVENT_BUS = new BAWFEventBus();
-	
-	public static List<IBAWFPlugin> toInitList=new ArrayList<IBAWFPlugin>();
+
+	public static List<IBAWFPlugin> toInitList = new ArrayList<IBAWFPlugin>();
 
 	public static boolean isDebug = true;
 
@@ -99,6 +99,7 @@ public class BlackAndWhiteForest extends Game {
 	public static float totalDelta, delta;
 	public static int width, height;
 	public static boolean doesRender = true;
+	public static Color backgroundColor = new Color((float) (2 - FI), (float) (2 - FI), (float) (2 - FI), 1);
 
 	public static ScreenWelcome welcome;
 	public static ScreenMain main;
@@ -164,8 +165,7 @@ public class BlackAndWhiteForest extends Game {
 	}
 
 	public static void feedback(Map<String, String> map) {
-		writeJson(httpRequestBuilder.newRequest().method(HttpMethods.POST)
-				.url("https://api.leancloud.cn/1.1/feedback")
+		writeJson(httpRequestBuilder.newRequest().method(HttpMethods.POST).url("https://api.leancloud.cn/1.1/feedback")
 				.header("X-LC-Id", "6v9rp1ndzdl5zbv9uiqjlzeex4v7gv2kh7hawtw02kft5ccd")
 				.header("X-LC-Key", "jlgcq1xbr6op5f5yuyj304x7iu6ee4b70tfei0dtzoghjxgv"), map);
 		final HttpRequest httpRequest = httpRequestBuilder.build();
@@ -224,10 +224,10 @@ public class BlackAndWhiteForest extends Game {
 		Gdx.input.setInputProcessor(null);
 		Gdx.input.setInputProcessor(multiplexer);
 	}
-	
-	static{
+
+	static {
 		toInitList.add(new IBAWFPlugin() {
-			
+
 			@Override
 			public void init() {
 				totalDelta = 0;
@@ -309,137 +309,144 @@ public class BlackAndWhiteForest extends Game {
 
 	@Override
 	public void create() {
-		try{
+		try {
 
-		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
-				Gdx.graphics.getDesktopDisplayMode().height, false);
+			Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
+					Gdx.graphics.getDesktopDisplayMode().height, false);
 
-		welcome = new ScreenWelcome();
-		main = new ScreenMain();
-		settings = new ScreenSettings();
-		gaming = new ScreenGaming();
+			welcome = new ScreenWelcome();
+			main = new ScreenMain();
+			settings = new ScreenSettings();
+			gaming = new ScreenGaming();
 
-		skin = new Skin();
-		while (!assetManager.update())
-			;
-		WindowStyle windowStyle = new WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(
-				new TextureRegion((Texture) assetManager.get("textures/dialogBackground.png", Texture.class))));
-		skin.add("default", windowStyle);
-		LabelStyle labelStyle = new LabelStyle(new BitmapFont(), Color.WHITE);
-		skin.add("default", labelStyle);
-		
-		for (IBAWFPlugin plugin : toInitList)
-			plugin.init();
+			skin = new Skin();
+			while (!assetManager.update())
+				;
+			WindowStyle windowStyle = new WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(
+					new TextureRegion((Texture) assetManager.get("textures/dialogBackground.png", Texture.class))));
+			skin.add("default", windowStyle);
+			LabelStyle labelStyle = new LabelStyle(new BitmapFont(), Color.WHITE);
+			skin.add("default", labelStyle);
 
-		addProcessor(stage);
-		
-		loadPlugin(".jar");
-		if (Gdx.app.getType().equals(ApplicationType.Android))
-			loadPlugin(".dex");
+			for (IBAWFPlugin plugin : toInitList)
+				plugin.init();
 
-		////////// HumanPlayerMovementListener
-		addProcessor(new GestureDetector(new GestureListener() {
+			addProcessor(stage);
 
-			@Override
-			public boolean zoom(float initialDistance, float distance) {
-				return false;
-			}
+			loadPlugin(".jar");
+			if (Gdx.app.getType().equals(ApplicationType.Android))
+				loadPlugin(".dex");
 
-			@Override
-			public boolean touchDown(float x, float y, int pointer, int button) {
-				System.out.println("touchDown.");
-				return false;
-			}
+			////////// HumanPlayerMovementListener
+			addProcessor(new GestureDetector(new GestureListener() {
 
-			@Override
-			public boolean tap(float x, float y, int count, int button) {
-				return false;
-			}
-
-			@Override
-			public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-				return false;
-			}
-
-			@Override
-			public boolean panStop(float x, float y, int pointer, int button) {
-				return false;
-			}
-
-			@Override
-			public boolean pan(float x, float y, float deltaX, float deltaY) {
-				return false;
-			}
-
-			@Override
-			public boolean longPress(float x, float y) {
-				return false;
-			}
-
-			@Override
-			public boolean fling(float velocityX, float velocityY, int button) {
-				// TODO Auto-generated method stub
-				System.out.println("velocityX: " + velocityX + ", velocityY: " + velocityY);
-				if(BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener){
-					HumanPlayerMovementListener listener=(HumanPlayerMovementListener)BAWFMap.INSTANCE.getCurrentPlayer().listener;
-					listener.velocityX = velocityX;
-					listener.velocityY = velocityY;
+				@Override
+				public boolean zoom(float initialDistance, float distance) {
+					return false;
 				}
-				return false;
-			}
-		}));
-		//////////
-		addProcessor(new InputProcessor() {
-			
-			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-				return false;
-			}
-			
-			@Override
-			public boolean touchDragged(int screenX, int screenY, int pointer) {
-				return false;
-			}
-			
-			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				return false;
-			}
-			
-			@Override
-			public boolean scrolled(int amount) {
-				return false;
-			}
-			
-			@Override
-			public boolean mouseMoved(int screenX, int screenY) {
-				return false;
-			}
-			
-			@Override
-			public boolean keyUp(int keycode) {
-				System.out.println(keycode);
-				if(BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener){
-					HumanPlayerMovementListener listener=(HumanPlayerMovementListener)BAWFMap.INSTANCE.getCurrentPlayer().listener;
-					if(keycode==Input.Keys.LEFT)listener.keyTypedX--;
-					if(keycode==Input.Keys.RIGHT)listener.keyTypedX++;
-					if(keycode==Input.Keys.UP)listener.keyTypedY--;
-					if(keycode==Input.Keys.DOWN)listener.keyTypedY++;
+
+				@Override
+				public boolean touchDown(float x, float y, int pointer, int button) {
+					System.out.println("touchDown.");
+					return false;
 				}
-				return false;
-			}
-			
-			@Override
-			public boolean keyTyped(char character) {
-				return false;
-			}
-			
-			@Override
-			public boolean keyDown(int keycode) {
-				return false;
-			}
-		});
-		}catch(Throwable t){
+
+				@Override
+				public boolean tap(float x, float y, int count, int button) {
+					return false;
+				}
+
+				@Override
+				public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1,
+						Vector2 pointer2) {
+					return false;
+				}
+
+				@Override
+				public boolean panStop(float x, float y, int pointer, int button) {
+					return false;
+				}
+
+				@Override
+				public boolean pan(float x, float y, float deltaX, float deltaY) {
+					return false;
+				}
+
+				@Override
+				public boolean longPress(float x, float y) {
+					return false;
+				}
+
+				@Override
+				public boolean fling(float velocityX, float velocityY, int button) {
+					// TODO Auto-generated method stub
+					System.out.println("velocityX: " + velocityX + ", velocityY: " + velocityY);
+					if (BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener) {
+						HumanPlayerMovementListener listener = (HumanPlayerMovementListener) BAWFMap.INSTANCE
+								.getCurrentPlayer().listener;
+						listener.velocityX = velocityX;
+						listener.velocityY = velocityY;
+					}
+					return false;
+				}
+			}));
+			//////////
+			addProcessor(new InputProcessor() {
+
+				@Override
+				public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+					return false;
+				}
+
+				@Override
+				public boolean touchDragged(int screenX, int screenY, int pointer) {
+					return false;
+				}
+
+				@Override
+				public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+					return false;
+				}
+
+				@Override
+				public boolean scrolled(int amount) {
+					return false;
+				}
+
+				@Override
+				public boolean mouseMoved(int screenX, int screenY) {
+					return false;
+				}
+
+				@Override
+				public boolean keyUp(int keycode) {
+					System.out.println(keycode);
+					if (BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener) {
+						HumanPlayerMovementListener listener = (HumanPlayerMovementListener) BAWFMap.INSTANCE
+								.getCurrentPlayer().listener;
+						if (keycode == Input.Keys.LEFT)
+							listener.keyTypedX--;
+						if (keycode == Input.Keys.RIGHT)
+							listener.keyTypedX++;
+						if (keycode == Input.Keys.UP)
+							listener.keyTypedY--;
+						if (keycode == Input.Keys.DOWN)
+							listener.keyTypedY++;
+					}
+					return false;
+				}
+
+				@Override
+				public boolean keyTyped(char character) {
+					return false;
+				}
+
+				@Override
+				public boolean keyDown(int keycode) {
+					return false;
+				}
+			});
+		} catch (Throwable t) {
 			BAWFCrashHandler.handleCrash(t);
 		}
 		setScreen(welcome);
@@ -447,17 +454,17 @@ public class BlackAndWhiteForest extends Game {
 
 	@Override
 	public void render() {
-		try{
-				super.render();
-				width = Gdx.graphics.getWidth();
-				height = Gdx.graphics.getHeight();
-				Gdx.gl.glClearColor((float) (2 - FI), (float) (2 - FI), (float) (2 - FI), 1);
-				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-				stage.act();
-				stage.draw();
-				delta = Gdx.graphics.getDeltaTime();
-				totalDelta += delta;
-		}catch(Throwable t){
+		try {
+			super.render();
+			width = Gdx.graphics.getWidth();
+			height = Gdx.graphics.getHeight();
+			Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			stage.act();
+			stage.draw();
+			delta = Gdx.graphics.getDeltaTime();
+			totalDelta += delta;
+		} catch (Throwable t) {
 			BAWFCrashHandler.handleCrash(t);
 		}
 	}
@@ -467,9 +474,9 @@ public class BlackAndWhiteForest extends Game {
 		super.resize(width, height);
 		// camera.setToOrtho(false, width, height);
 	}
-	
+
 	@Override
-	public void resume () {
+	public void resume() {
 		super.resume();
 		assetManager.finishLoading();
 	}
