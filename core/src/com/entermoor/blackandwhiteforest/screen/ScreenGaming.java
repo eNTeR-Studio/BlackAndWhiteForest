@@ -2,7 +2,6 @@ package com.entermoor.blackandwhiteforest.screen;
 
 import com.badlogic.gdx.Screen;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
-import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 
 public class ScreenGaming implements Screen {
 

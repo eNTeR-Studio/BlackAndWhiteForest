@@ -29,6 +29,7 @@ public class ScreenMain implements Screen {
 			if (event instanceof InputEvent && ((InputEvent) event).getType().equals(InputEvent.Type.touchUp)) {
 				BlackAndWhiteForest.INSTANSE.setScreen(BlackAndWhiteForest.gaming);
 				BlackAndWhiteForest.stage.clear();
+				BlackAndWhiteForest.stage.getRoot().getColor().a=1.0F;
 				BlackAndWhiteForest.stage.getBatch().flush();
 				BAWFMap.INSTANCE.load();
 			}
