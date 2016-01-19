@@ -12,7 +12,7 @@ import com.entermoor.blackandwhiteforest.api.IBAWFEventReceiver;
 /**
  * @author fxzjshm
  */
-public class BAWFEventBus {
+public class BAWFEventBus implements IBAWFEventBus {
 
 	public List<IBAWFEventReceiver> receiverList = new ArrayList<IBAWFEventReceiver>();
 	public List<Method> receiverMethodList = new ArrayList<Method>();

@@ -1,15 +1,9 @@
 package com.entermoor.blackandwhiteforest;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Random;
 import java.util.Map.Entry;
 
@@ -32,10 +26,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.net.HttpRequestHeader;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -47,7 +37,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
-import com.entermoor.blackandwhiteforest.event.BAWFEventBus;
+import com.entermoor.blackandwhiteforest.event.IBAWFEventBus;
 import com.entermoor.blackandwhiteforest.map.BAWFMap;
 import com.entermoor.blackandwhiteforest.screen.ScreenGaming;
 import com.entermoor.blackandwhiteforest.screen.ScreenMain;
@@ -80,7 +70,8 @@ public class BlackAndWhiteForest extends Game {
 	public static final double FI = (Math.sqrt(5) + 1) / 2;
 
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
-	public static final BAWFEventBus BAWF_EVENT_BUS = new BAWFEventBus();
+	
+	public static IBAWFEventBus BAWF_EVENT_BUS;
 
 	public static List<IBAWFPlugin> toInitList = new ArrayList<IBAWFPlugin>();
 
@@ -107,9 +98,8 @@ public class BlackAndWhiteForest extends Game {
 	public static ScreenGaming gaming;
 
 	public static Sound[] click = new Sound[4];
-	public static FreeTypeFontGenerator fontGenerator;
+	//public static FreeTypeFontGenerator fontGenerator;
 
-	public static IPluginClassLoader iLoader;
 	public static InputMultiplexer multiplexer = new InputMultiplexer();
 
 	public static enum ResourceType {
@@ -192,10 +182,6 @@ public class BlackAndWhiteForest extends Game {
 		});
 	}
 
-	public static interface IPluginClassLoader {
-		ClassLoader getClassLoader(File... files) throws Exception;
-	}
-
 	public static HttpRequestBuilder writeJson(HttpRequestBuilder requestBuilder, Map<String, String> map) {
 		requestBuilder.header(HttpRequestHeader.ContentType, "application/json");
 		StringBuilder content = new StringBuilder(200);
@@ -244,7 +230,8 @@ public class BlackAndWhiteForest extends Game {
 				while (!assetManager.update())
 					;
 
-				//fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/SourceHanSansCN-Normal.ttf"));
+				// fontGenerator = new
+				// FreeTypeFontGenerator(Gdx.files.internal("data/SourceHanSansCN-Normal.ttf"));
 				click[0] = assetManager.get("sounds/202312__7778__dbl-click-edited.mp3", Sound.class);
 				click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
 				click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
@@ -264,55 +251,11 @@ public class BlackAndWhiteForest extends Game {
 	private BlackAndWhiteForest() {
 	}
 
-	private void loadPlugin(String suffix) {
-		FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Android)
-				? Gdx.files.external("BlackAndWhiteForest/plugins/") : Gdx.files.local("plugins/");
-		if (!pluginFolder.exists())
-			pluginFolder.mkdirs();
-		FileHandle[] files = pluginFolder.list(suffix);
-		for (int i = 0; i < files.length; i++) {
-			try {
-				File jarFile = files[i].file();
-				if (iLoader == null)
-					iLoader = new IPluginClassLoader() {
-						@Override
-						public ClassLoader getClassLoader(File... files) throws MalformedURLException {
-							// Only for desktop.
-							return new URLClassLoader(new URL[] { files[0].toURI().toURL() });
-						}
-					};
-				ClassLoader loader = iLoader.getClassLoader(jarFile/* ,optimizedDirectory */);
-				File propsFile = new File(files[i].file().getAbsolutePath() + ".properties");
-				Properties props = new Properties();
-				if (propsFile.exists()) {
-					props.load(new FileInputStream(propsFile));
-					String className = props.getProperty("mainClass", "");
-					if (className != "" || className != null) {
-						Class<?> aClass = loader.loadClass(className);
-						Class<?>[] interfaces = aClass.getInterfaces();
-						for (int j = 0; j < interfaces.length; j++) {
-							if (interfaces[j].getName().equals(IBAWFPlugin.class.getName())) {
-								IBAWFPlugin instance = (IBAWFPlugin) aClass.newInstance();
-								instance.init();
-								break;
-							}
-						}
-					}
-				}
-				// loader.close();
-			} catch (Exception e) {
-				BAWFCrashHandler.handleCrash(e);
-				continue;
-			}
-		}
-	}
-
 	@Override
 	public void create() {
 		try {
-
-			Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
-					Gdx.graphics.getDesktopDisplayMode().height, false);
+			
+			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
 			welcome = new ScreenWelcome();
 			main = new ScreenMain();
@@ -333,64 +276,6 @@ public class BlackAndWhiteForest extends Game {
 
 			addProcessor(stage);
 
-			loadPlugin(".jar");
-			if (Gdx.app.getType().equals(ApplicationType.Android))
-				loadPlugin(".dex");
-
-			////////// HumanPlayerMovementListener
-			addProcessor(new GestureDetector(new GestureListener() {
-
-				@Override
-				public boolean zoom(float initialDistance, float distance) {
-					return false;
-				}
-
-				@Override
-				public boolean touchDown(float x, float y, int pointer, int button) {
-					System.out.println("touchDown.");
-					return false;
-				}
-
-				@Override
-				public boolean tap(float x, float y, int count, int button) {
-					return false;
-				}
-
-				@Override
-				public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1,
-						Vector2 pointer2) {
-					return false;
-				}
-
-				@Override
-				public boolean panStop(float x, float y, int pointer, int button) {
-					return false;
-				}
-
-				@Override
-				public boolean pan(float x, float y, float deltaX, float deltaY) {
-					return false;
-				}
-
-				@Override
-				public boolean longPress(float x, float y) {
-					return false;
-				}
-
-				@Override
-				public boolean fling(float velocityX, float velocityY, int button) {
-					// TODO Auto-generated method stub
-					System.out.println("velocityX: " + velocityX + ", velocityY: " + velocityY);
-					if (BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener) {
-						HumanPlayerMovementListener listener = (HumanPlayerMovementListener) BAWFMap.INSTANCE
-								.getCurrentPlayer().listener;
-						listener.velocityX = velocityX;
-						listener.velocityY = velocityY;
-					}
-					return false;
-				}
-			}));
-			//////////
 			addProcessor(new InputProcessor() {
 
 				@Override

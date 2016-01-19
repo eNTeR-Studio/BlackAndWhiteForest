@@ -75,11 +75,11 @@ public class BAWFPlayer extends Image {
 	}
 
 	public static float realX(int blockX) {
-		return (float) (BAWFMap.INSTANCE.edgeWidth + BAWFMap.pixalsPerBlock * (blockX + 0.5 - 1 / (2 * Math.E)));
+		return (float) (BAWFMap.INSTANCE.edgeWidth + BAWFMap.pixalsPerBlock * (blockX + 0.5));
 	}
 
 	public static float realY(int blockY) {
-		return (float) (BAWFMap.INSTANCE.edgeWidth + BAWFMap.pixalsPerBlock * (blockY + 0.5 - 1 / (2 * Math.E)));
+		return (float) (BAWFMap.INSTANCE.edgeWidth + BAWFMap.pixalsPerBlock * (blockY + 0.5));
 	}
 
 	public Color color;
@@ -93,13 +93,13 @@ public class BAWFPlayer extends Image {
 		this.shape = shape;
 		blockX = x;
 		blockY = y;
-		Pixmap pixmap = new Pixmap(new Gdx2DPixmap((int) (BAWFMap.pixalsPerBlock / Math.E),
-				(int) (BAWFMap.pixalsPerBlock / Math.E), Gdx2DPixmap.GDX2D_FORMAT_RGBA8888));
+		Pixmap pixmap = new Pixmap((int) (BAWFMap.pixalsPerBlock), (int) (BAWFMap.pixalsPerBlock),
+				Pixmap.Format.RGBA8888);
 		pixmap.setColor(color);
 		switch (shape) {
 		case circle:
-			pixmap.fillCircle((int) (BAWFMap.pixalsPerBlock / Math.E / 2), (int) (BAWFMap.pixalsPerBlock / Math.E / 2),
-					(int) (BAWFMap.pixalsPerBlock / Math.E / 2));
+			pixmap.fillCircle((int) (BAWFMap.pixalsPerBlock / 2), (int) (BAWFMap.pixalsPerBlock / 2),
+					(int) (BAWFMap.pixalsPerBlock / 2));
 			break;
 		case rectangle:
 			pixmap.fill();
@@ -123,11 +123,11 @@ public class BAWFPlayer extends Image {
 		if (map.player[map.currentPlayerId] == this) {
 			if (listener != null && listener.refresh(this))
 				map.nextPlayer();
-				for (MovementPackage movementPackage : todoList) {
-					blockX += movementPackage.transverse;
-					blockY += movementPackage.longitudinal;
-					todoList.remove(movementPackage);
-				}
+			for (MovementPackage movementPackage : todoList) {
+				blockX += movementPackage.transverse;
+				blockY += movementPackage.longitudinal;
+				todoList.remove(movementPackage);
+			}
 		}
 		setBounds();
 	}
@@ -137,8 +137,10 @@ public class BAWFPlayer extends Image {
 			blockX = 0;
 		if (blockY < 0)
 			blockY = 0;
-		if(blockX>map.countX-1)blockX=map.countX-1;
-		if(blockY>map.countY-1)blockY=map.countY-1;
+		if (blockX > map.countX - 1)
+			blockX = map.countX - 1;
+		if (blockY > map.countY - 1)
+			blockY = map.countY - 1;
 		setBounds(realX(blockX), realY(blockY), size, size);
 	}
 

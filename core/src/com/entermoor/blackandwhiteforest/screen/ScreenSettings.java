@@ -20,7 +20,6 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.util.BAWFConfig;
-import com.entermoor.blackandwhiteforest.util.BAWFTranslator;
 
 public class ScreenSettings implements Screen {
 
@@ -66,7 +65,7 @@ public class ScreenSettings implements Screen {
 
 								}
 
-							}, BAWFTranslator.get("We need more information to contact you !"), "", "");
+							}, "We need more information to contact you !", "", "");
 
 						}
 						contactInfo = BAWFConfig.get("ContactInfo");

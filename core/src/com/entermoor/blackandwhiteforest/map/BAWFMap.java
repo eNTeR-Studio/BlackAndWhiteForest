@@ -5,6 +5,9 @@ import java.io.ObjectInputStream;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.math.Vector2;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.map.BAWFPlayer.BAWFPlayerShape;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
@@ -44,10 +47,64 @@ public class BAWFMap {
 			}
 		}
 		player[0]=new BAWFPlayer(Color.BLACK, BAWFPlayerShape.circle, 0, 0,new HumanPlayerMovementListener());
+		////////// HumanPlayerMovementListener
+		BlackAndWhiteForest.addProcessor(new GestureDetector(new GestureListener() {
+
+			@Override
+			public boolean zoom(float initialDistance, float distance) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(float x, float y, int pointer, int button) {
+				System.out.println("touchDown.");
+				return false;
+			}
+
+			@Override
+			public boolean tap(float x, float y, int count, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1,
+					Vector2 pointer2) {
+				return false;
+			}
+
+			@Override
+			public boolean panStop(float x, float y, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean pan(float x, float y, float deltaX, float deltaY) {
+				return false;
+			}
+
+			@Override
+			public boolean longPress(float x, float y) {
+				return false;
+			}
+
+			@Override
+			public boolean fling(float velocityX, float velocityY, int button) {
+				// TODO Auto-generated method stub
+				System.out.println("velocityX: " + velocityX + ", velocityY: " + velocityY);
+				if (BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener) {
+					HumanPlayerMovementListener listener = (HumanPlayerMovementListener) BAWFMap.INSTANCE
+							.getCurrentPlayer().listener;
+					listener.velocityX = velocityX;
+					listener.velocityY = velocityY;
+				}
+				return false;
+			}
+		}));
+		//////////
 		BlackAndWhiteForest.stage.addActor(player[0]);
 	}
 
-	public void load(FileHandle file) {
+	/*public void load(FileHandle file) {
 		if (!file.exists())
 			load();
 		try {
@@ -56,7 +113,7 @@ public class BAWFMap {
 		} catch (Exception e) {
 			BAWFCrashHandler.handleCrash(e);
 		}
-	}
+	}*/
 	
 	public BAWFPlayer getCurrentPlayer(){
 		return player[currentPlayerId];
