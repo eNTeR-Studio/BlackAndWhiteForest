@@ -103,6 +103,7 @@ public class BlackAndWhiteForest extends Game {
 	public static Sound[] click = new Sound[4];
 	public static Music[] bgm = new Music[5];
 	public static Music currentBGM;
+	public static Color bgcs[]=new Color[10];
 	// public static FreeTypeFontGenerator fontGenerator;
 
 	public static InputMultiplexer multiplexer = new InputMultiplexer();

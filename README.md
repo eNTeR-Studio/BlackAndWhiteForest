@@ -1,5 +1,6 @@
 # BlackAndWhiteForest 黑白森林 #
 ----------
+![](https://travis-ci.org/eNTeR-Studio/BlackAndWhiteForest.svg)
 
 ## Credits 感谢 ##
 
