@@ -46,6 +46,7 @@ import com.entermoor.blackandwhiteforest.screen.ScreenWelcome;
 import com.entermoor.blackandwhiteforest.util.BAWFAssetManager;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
+import com.entermoor.blackandwhiteforest.util.IBAWFConfig;
 
 /**
  * <p>
@@ -71,7 +72,10 @@ public class BlackAndWhiteForest extends Game {
 
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
 	
+	/**Will be null in Html5 and iOS. */
 	public static IBAWFEventBus BAWF_EVENT_BUS;
+	/**Will be null in Html5. */
+	public static IBAWFConfig config;
 
 	public static List<IBAWFPlugin> toInitList = new ArrayList<IBAWFPlugin>();
 

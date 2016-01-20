@@ -14,20 +14,22 @@ import com.badlogic.gdx.files.FileHandle;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.event.BAWFEventBus;
+import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 
 public class AndroidLauncher extends AndroidApplication {
-	
+
 	private AndroidLauncher BAWFAndroidLauncher = this;
-	
+
 	@Override
-	protected void onCreate (Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(BlackAndWhiteForest.INSTANSE, config);
-		BlackAndWhiteForest.BAWF_EVENT_BUS=new BAWFEventBus();
+		BlackAndWhiteForest.BAWF_EVENT_BUS = new BAWFEventBus();
+		BlackAndWhiteForest.config = new BAWFConfig();
 		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin() {
-			
+
 			@Override
 			public void init() {
 				loadPlugin(".jar");
@@ -35,7 +37,7 @@ public class AndroidLauncher extends AndroidApplication {
 			}
 		});
 	}
-	
+
 	private void loadPlugin(String suffix) {
 		FileHandle pluginFolder = Gdx.app.getType().equals(ApplicationType.Android)
 				? Gdx.files.external("BlackAndWhiteForest/plugins/") : Gdx.files.local("plugins/");

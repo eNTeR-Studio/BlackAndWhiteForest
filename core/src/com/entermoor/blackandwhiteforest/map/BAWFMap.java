@@ -1,8 +1,5 @@
 package com.entermoor.blackandwhiteforest.map;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.input.GestureDetector;
@@ -10,7 +7,6 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.map.BAWFPlayer.BAWFPlayerShape;
-import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
 
 public class BAWFMap {

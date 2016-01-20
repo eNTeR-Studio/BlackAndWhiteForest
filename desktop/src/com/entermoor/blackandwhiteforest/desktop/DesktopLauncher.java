@@ -14,12 +14,16 @@ import com.badlogic.gdx.files.FileHandle;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.event.BAWFEventBus;
+import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		
 		BlackAndWhiteForest.BAWF_EVENT_BUS=new BAWFEventBus();
+		BlackAndWhiteForest.config = new BAWFConfig();
+		
 		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin() {
 			
 			@Override
@@ -39,7 +43,7 @@ public class DesktopLauncher {
 		for (int i = 0; i < files.length; i++) {
 			try {
 				File jarFile = files[i].file();
-				ClassLoader loader = new URLClassLoader(new URL[] { jarFile.toURI().toURL() });
+				URLClassLoader loader = new URLClassLoader(new URL[] { jarFile.toURI().toURL() });
 				File propsFile = new File(files[i].file().getAbsolutePath() + ".properties");
 				Properties props = new Properties();
 				if (propsFile.exists()) {
@@ -57,7 +61,7 @@ public class DesktopLauncher {
 						}
 					}
 				}
-				// loader.close();
+				loader.close();
 			} catch (Exception e) {
 				BAWFCrashHandler.handleCrash(e);
 				continue;

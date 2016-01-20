@@ -100,13 +100,14 @@ public class BAWFCrashHandler {
 			BlackAndWhiteForest.feedback(contentMap);
 			// }
 		}
-		FileHandle crashLog=BlackAndWhiteForest.getSavePath(String.valueOf(new Date().getTime())+".txt");
+		
+		/*FileHandle crashLog=BlackAndWhiteForest.getSavePath(String.valueOf(new Date().getTime())+".txt");
 		try {
 			crashLog.file().createNewFile();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		crashLog.writeString(msgBuilder.toString(), true);
+		crashLog.writeString(msgBuilder.toString(), true);*/
 	}
 }

@@ -19,7 +19,6 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
-import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 
 public class ScreenSettings implements Screen {
 
@@ -50,14 +49,14 @@ public class ScreenSettings implements Screen {
 						Map<String, String> contentMap = new HashMap<String, String>();
 						contentMap.put("\"status\"", "\"open\"");
 						contentMap.put("\"content\"", "\"" + text + "\"");
-						String contactInfo = BAWFConfig.get("ContactInfo");
+						String contactInfo = BlackAndWhiteForest.config.get("ContactInfo");
 						if (contactInfo == null || contactInfo.equals("")) {
 
 							Gdx.input.getTextInput(new TextInputListener() {
 
 								@Override
 								public void input(String text) {
-									BAWFConfig.config.setProperty("ContactInfo", text);
+									BlackAndWhiteForest.config.setProperty("ContactInfo", text);
 								}
 
 								@Override
@@ -68,7 +67,7 @@ public class ScreenSettings implements Screen {
 							}, "We need more information to contact you !", "", "");
 
 						}
-						contactInfo = BAWFConfig.get("ContactInfo");
+						contactInfo = BlackAndWhiteForest.config.get("ContactInfo");
 						contentMap.put("\"contact\"", "\"" + contactInfo + "\"");
 						BlackAndWhiteForest.feedback(contentMap);
 					}

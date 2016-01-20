@@ -12,7 +12,7 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
  * Key list:
  * ContactInfo
  * */
-public class BAWFConfig {
+public class BAWFConfig implements IBAWFConfig{
 	
 	public static Properties config = new Properties();
 
@@ -27,7 +27,7 @@ public class BAWFConfig {
 		}
 	}
 
-	public static String get(String key, String defaultValue) {
+	public String get(String key, String defaultValue) {
 		String val = config.getProperty(key);
 		if (val == null) {
 			config.setProperty(key, defaultValue);
@@ -37,11 +37,11 @@ public class BAWFConfig {
 		}
 	}
 
-	public static String get(String key) {
+	public String get(String key) {
 		return config.getProperty(key, null);
 	}
 	
-	public static void set(String key, String value){
+	public void set(String key, String value){
 		config.setProperty(key, value);
 		try {
 			config.store(new FileOutputStream(BlackAndWhiteForest.getSavePath("BAWFConfig.properties").file()), "The properties of BlackAndWhiteForest");
@@ -53,4 +53,10 @@ public class BAWFConfig {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void setProperty(String key, String value) {
+		config.setProperty(key, value);
+	}
+
 }

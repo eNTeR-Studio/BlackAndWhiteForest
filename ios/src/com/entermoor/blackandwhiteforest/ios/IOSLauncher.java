@@ -1,4 +1,4 @@
-package enter.blackandwhiteforest;
+package com.entermoor.blackandwhiteforest.ios;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
@@ -6,11 +6,13 @@ import org.robovm.apple.uikit.UIApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
+import com.entermoor.blackandwhiteforest.util.BAWFConfig;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        BlackAndWhiteForest.config = new BAWFConfig();
         return new IOSApplication(BlackAndWhiteForest.INSTANSE, config);
     }
 

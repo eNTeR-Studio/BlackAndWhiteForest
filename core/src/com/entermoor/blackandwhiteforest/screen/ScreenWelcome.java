@@ -2,12 +2,9 @@ package com.entermoor.blackandwhiteforest.screen;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.ResourceType;
-import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 
 public class ScreenWelcome implements Screen {
 
