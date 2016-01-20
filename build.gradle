@@ -100,7 +100,7 @@ tasks.eclipse.doLast {
     delete ".project"
 }
 
-task buildAll(type: Copy, dependsOn: ['android:assembleRelease', 'desktop:dist']) {
+task buildAll(type: Copy, dependsOn: ['android:assembleRelease', 'desktop:dist', 'html:dist']) {
  copy{
   from('desktop/build/libs') {
    include('desktop-1.0.jar')
