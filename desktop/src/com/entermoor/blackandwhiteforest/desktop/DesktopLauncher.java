@@ -21,7 +21,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		
-		BlackAndWhiteForest.BAWF_EVENT_BUS=new BAWFEventBus();
+		BlackAndWhiteForest.eventBus=new BAWFEventBus();
 		BlackAndWhiteForest.config = new BAWFConfig();
 		
 		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin() {

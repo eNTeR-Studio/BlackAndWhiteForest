@@ -1,6 +1,8 @@
 package com.entermoor.blackandwhiteforest.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,6 +15,7 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest.SoundType;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.map.BAWFMap;
+import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
 
 public class ScreenMain implements Screen {
 
@@ -32,6 +35,61 @@ public class ScreenMain implements Screen {
 				BlackAndWhiteForest.stage.getRoot().getColor().a=1.0F;
 				BlackAndWhiteForest.stage.getBatch().flush();
 				BAWFMap.INSTANCE.load();
+				BlackAndWhiteForest.addProcessor(new InputProcessor() {
+
+					@Override
+					public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+						return false;
+					}
+
+					@Override
+					public boolean touchDragged(int screenX, int screenY, int pointer) {
+						return false;
+					}
+
+					@Override
+					public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+						return false;
+					}
+
+					@Override
+					public boolean scrolled(int amount) {
+						return false;
+					}
+
+					@Override
+					public boolean mouseMoved(int screenX, int screenY) {
+						return false;
+					}
+
+					@Override
+					public boolean keyUp(int keycode) {
+						System.out.println(keycode);
+						if (BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener) {
+							HumanPlayerMovementListener listener = (HumanPlayerMovementListener) BAWFMap.INSTANCE
+									.getCurrentPlayer().listener;
+							if (keycode == Input.Keys.LEFT)
+								listener.keyTypedX--;
+							if (keycode == Input.Keys.RIGHT)
+								listener.keyTypedX++;
+							if (keycode == Input.Keys.UP)
+								listener.keyTypedY--;
+							if (keycode == Input.Keys.DOWN)
+								listener.keyTypedY++;
+						}
+						return false;
+					}
+
+					@Override
+					public boolean keyTyped(char character) {
+						return false;
+					}
+
+					@Override
+					public boolean keyDown(int keycode) {
+						return false;
+					}
+				});
 			}
 			return true;
 		}

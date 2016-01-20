@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.Scaling;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlayerMovementListener;
 
@@ -22,7 +24,7 @@ public class BAWFPlayer extends Image {
 		circle, rectangle
 	}
 
-	public static class MovementPackage {
+	public static class MovementPackage implements Disposable {
 
 		public int transverse;
 		public int longitudinal;
@@ -70,6 +72,12 @@ public class BAWFPlayer extends Image {
 		public MovementPackage down(int count) {
 			longitudinal -= count;
 			return this;
+		}
+
+		@Override
+		public void dispose() {
+			transverse = 0;
+			longitudinal = 0;
 		}
 	}
 
@@ -126,6 +134,8 @@ public class BAWFPlayer extends Image {
 				blockX += movementPackage.transverse;
 				blockY += movementPackage.longitudinal;
 				todoList.remove(movementPackage);
+				movementPackage.dispose();
+				Pools.get(MovementPackage.class).free(movementPackage);
 			}
 		}
 		setBounds();

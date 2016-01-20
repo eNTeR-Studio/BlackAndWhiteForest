@@ -26,7 +26,7 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(BlackAndWhiteForest.INSTANSE, config);
-		BlackAndWhiteForest.BAWF_EVENT_BUS = new BAWFEventBus();
+		BlackAndWhiteForest.eventBus = new BAWFEventBus();
 		BlackAndWhiteForest.config = new BAWFConfig();
 		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin() {
 

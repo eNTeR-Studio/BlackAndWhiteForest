@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
+import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 
 /**
  * Key list:
@@ -15,16 +16,22 @@ import com.entermoor.blackandwhiteforest.BlackAndWhiteForest;
 public class BAWFConfig implements IBAWFConfig{
 	
 	public static Properties config = new Properties();
-
+	
 	static {
-		try {
-			FileHandle configFile = BlackAndWhiteForest.getSavePath("BAWFConfig.properties");
-			if (!configFile.exists())
-				configFile.file().createNewFile();
-			config.load(configFile.read());
-		} catch (Exception e) {
-			BAWFCrashHandler.handleCrash(e);
-		}
+		BlackAndWhiteForest.toInitList.add(new IBAWFPlugin() {
+			
+			@Override
+			public void init() {
+				try {
+					FileHandle configFile = BlackAndWhiteForest.getSavePath("BAWFConfig.properties");
+					if (!configFile.exists())
+						configFile.file().createNewFile();
+					config.load(configFile.read());
+				} catch (Exception e) {
+					BAWFCrashHandler.handleCrash(e);
+				}
+			}
+		});
 	}
 
 	public String get(String key, String defaultValue) {

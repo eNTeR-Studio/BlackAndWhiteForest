@@ -14,9 +14,10 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -38,14 +39,12 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.entermoor.blackandwhiteforest.api.IBAWFPlugin;
 import com.entermoor.blackandwhiteforest.event.IBAWFEventBus;
-import com.entermoor.blackandwhiteforest.map.BAWFMap;
 import com.entermoor.blackandwhiteforest.screen.ScreenGaming;
 import com.entermoor.blackandwhiteforest.screen.ScreenMain;
 import com.entermoor.blackandwhiteforest.screen.ScreenSettings;
 import com.entermoor.blackandwhiteforest.screen.ScreenWelcome;
 import com.entermoor.blackandwhiteforest.util.BAWFAssetManager;
 import com.entermoor.blackandwhiteforest.util.BAWFCrashHandler;
-import com.entermoor.blackandwhiteforest.util.HumanPlayerMovementListener;
 import com.entermoor.blackandwhiteforest.util.IBAWFConfig;
 
 /**
@@ -71,10 +70,10 @@ public class BlackAndWhiteForest extends Game {
 	public static final double FI = (Math.sqrt(5) + 1) / 2;
 
 	public static final BlackAndWhiteForest INSTANSE = new BlackAndWhiteForest();
-	
-	/**Will be null in Html5 and iOS. */
-	public static IBAWFEventBus BAWF_EVENT_BUS;
-	/**Will be null in Html5. */
+
+	/** Will be null in Html5 and iOS. */
+	public static IBAWFEventBus eventBus;
+	/** Will be null in Html5. */
 	public static IBAWFConfig config;
 
 	public static List<IBAWFPlugin> toInitList = new ArrayList<IBAWFPlugin>();
@@ -102,7 +101,9 @@ public class BlackAndWhiteForest extends Game {
 	public static ScreenGaming gaming;
 
 	public static Sound[] click = new Sound[4];
-	//public static FreeTypeFontGenerator fontGenerator;
+	public static Music[] bgm = new Music[5];
+	public static Music currentBGM;
+	// public static FreeTypeFontGenerator fontGenerator;
 
 	public static InputMultiplexer multiplexer = new InputMultiplexer();
 
@@ -130,7 +131,7 @@ public class BlackAndWhiteForest extends Game {
 	}
 
 	public static long playSound(SoundType type) throws IllegalArgumentException {
-		return playSound(type, 1.0F);
+		return playSound(type, (float) Math.PI / 10);
 	}
 
 	public static long playSound(SoundType type, float volume) throws IllegalArgumentException {
@@ -230,6 +231,11 @@ public class BlackAndWhiteForest extends Game {
 				assetManager.load("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
 				assetManager.load("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
 				assetManager.load("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
+				assetManager.load("sounds/320506__lemoncreme__ambient-piano-music-1.mp3", Music.class);
+				assetManager.load("sounds/320525__lemoncreme__ambient-piano-music-2.mp3", Music.class);
+				assetManager.load("sounds/320526__lemoncreme__ambient-piano-music-3.mp3", Music.class);
+				assetManager.load("sounds/320603__lemoncreme__ambient-piano-music-4.mp3", Music.class);
+				assetManager.load("sounds/321146__lemoncreme__ambient-piano-music-5.mp3", Music.class);
 
 				while (!assetManager.update())
 					;
@@ -240,6 +246,11 @@ public class BlackAndWhiteForest extends Game {
 				click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
 				click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
 				click[3] = assetManager.get("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
+				bgm[0] = assetManager.get("sounds/320506__lemoncreme__ambient-piano-music-1.mp3", Music.class);
+				bgm[1] = assetManager.get("sounds/320525__lemoncreme__ambient-piano-music-2.mp3", Music.class);
+				bgm[2] = assetManager.get("sounds/320526__lemoncreme__ambient-piano-music-3.mp3", Music.class);
+				bgm[3] = assetManager.get("sounds/320603__lemoncreme__ambient-piano-music-4.mp3", Music.class);
+				bgm[4] = assetManager.get("sounds/321146__lemoncreme__ambient-piano-music-5.mp3", Music.class);
 
 				batch = new SpriteBatch();
 				camera = new OrthographicCamera(width, height);
@@ -258,7 +269,7 @@ public class BlackAndWhiteForest extends Game {
 	@Override
 	public void create() {
 		try {
-			
+
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
 			welcome = new ScreenWelcome();
@@ -279,7 +290,6 @@ public class BlackAndWhiteForest extends Game {
 				plugin.init();
 
 			addProcessor(stage);
-
 			addProcessor(new InputProcessor() {
 
 				@Override
@@ -309,18 +319,8 @@ public class BlackAndWhiteForest extends Game {
 
 				@Override
 				public boolean keyUp(int keycode) {
-					System.out.println(keycode);
-					if (BAWFMap.INSTANCE.getCurrentPlayer().listener instanceof HumanPlayerMovementListener) {
-						HumanPlayerMovementListener listener = (HumanPlayerMovementListener) BAWFMap.INSTANCE
-								.getCurrentPlayer().listener;
-						if (keycode == Input.Keys.LEFT)
-							listener.keyTypedX--;
-						if (keycode == Input.Keys.RIGHT)
-							listener.keyTypedX++;
-						if (keycode == Input.Keys.UP)
-							listener.keyTypedY--;
-						if (keycode == Input.Keys.DOWN)
-							listener.keyTypedY++;
+					if (keycode == Keys.ESCAPE) {
+						Gdx.app.exit();
 					}
 					return false;
 				}
@@ -335,9 +335,13 @@ public class BlackAndWhiteForest extends Game {
 					return false;
 				}
 			});
+
 		} catch (Throwable t) {
 			BAWFCrashHandler.handleCrash(t);
 		}
+
+		currentBGM = bgm[new Random().nextInt(bgm.length)];
+		currentBGM.play();
 		setScreen(welcome);
 	}
 
@@ -353,6 +357,10 @@ public class BlackAndWhiteForest extends Game {
 			stage.draw();
 			delta = Gdx.graphics.getDeltaTime();
 			totalDelta += delta;
+			if (currentBGM.isPlaying() == false) {
+				currentBGM = bgm[new Random().nextInt(bgm.length)];
+				currentBGM.play();
+			}
 		} catch (Throwable t) {
 			BAWFCrashHandler.handleCrash(t);
 		}

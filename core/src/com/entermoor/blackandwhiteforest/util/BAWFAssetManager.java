@@ -3,6 +3,11 @@ package com.entermoor.blackandwhiteforest.util;
 import com.badlogic.gdx.assets.AssetManager;
 
 public class BAWFAssetManager extends AssetManager {
+	
+	@Override
+	public synchronized <T> void load (String fileName, Class<T> type) {
+		load(fileName, type, null);
+	}
 
 	@Override
 	@Deprecated

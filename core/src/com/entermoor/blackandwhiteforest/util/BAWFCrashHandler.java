@@ -57,42 +57,14 @@ public class BAWFCrashHandler {
 					}
 				});
 				errDialog.button(button);
-
-				// BlackAndWhiteForest.doesRender = false;
+				
 				errDialog.show(BlackAndWhiteForest.stage);
 				BlackAndWhiteForest.INSTANSE.setScreen(new ScreenError(BlackAndWhiteForest.INSTANSE.getScreen()));
 			}
-			/*
-			 * if (Gdx.app.getType().equals(ApplicationType.Android) ||
-			 * Gdx.app.getType().equals(ApplicationType.Desktop)) {
-			 */
-			/*
-			 * Socket socket = Gdx.net.newClientSocket(Net.Protocol.TCP,
-			 * "https://api.leancloud.cn/1.1/feedback", 80, null);
-			 */
 
 			Map<String, String> contentMap = new HashMap<String, String>();
 			contentMap.put("\"status\"", "\"open\"");
 			contentMap.put("\"content\"", "\"" + msgBuilder.toString() + "\"");
-			/*String contactInfo = BAWFConfig.get("ContactInfo");
-			if (contactInfo == null || contactInfo.equals("")) {
-
-				Gdx.input.getTextInput(new TextInputListener() {
-
-					@Override
-					public void input(String text) {
-						BAWFConfig.config.setProperty("ContactInfo", text);
-					}
-
-					@Override
-					public void canceled() {
-
-					}
-
-				}, BAWFTranslator.get("We need more information to contact you !"), "", "");
-
-			}
-			contactInfo = BAWFConfig.get("ContactInfo");*/
 			contentMap.put("\"contact\"", "\"\"");
 			BlackAndWhiteForest.feedback(contentMap);
 			// }
