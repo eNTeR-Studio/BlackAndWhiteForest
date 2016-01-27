@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "http://maven.oschina.net/content/groups/public/" }
         jcenter()
     }
     dependencies {
@@ -27,6 +27,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+		maven { url "http://maven.oschina.net/content/groups/public/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
