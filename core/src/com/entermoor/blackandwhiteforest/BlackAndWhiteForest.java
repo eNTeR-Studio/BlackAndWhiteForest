@@ -232,11 +232,11 @@ public class BlackAndWhiteForest extends Game {
 				assetManager.load("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
 				assetManager.load("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
 				assetManager.load("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
-				assetManager.load("sounds/320506__lemoncreme__ambient-piano-music-1.mp3", Music.class);
-				assetManager.load("sounds/320525__lemoncreme__ambient-piano-music-2.mp3", Music.class);
-				assetManager.load("sounds/320526__lemoncreme__ambient-piano-music-3.mp3", Music.class);
-				assetManager.load("sounds/320603__lemoncreme__ambient-piano-music-4.mp3", Music.class);
-				assetManager.load("sounds/321146__lemoncreme__ambient-piano-music-5.mp3", Music.class);
+				assetManager.load("sounds/320506__lemoncreme__ambient-piano-music-1.ogg", Music.class);
+				assetManager.load("sounds/320525__lemoncreme__ambient-piano-music-2.ogg", Music.class);
+				assetManager.load("sounds/320526__lemoncreme__ambient-piano-music-3.ogg", Music.class);
+				assetManager.load("sounds/320603__lemoncreme__ambient-piano-music-4.ogg", Music.class);
+				assetManager.load("sounds/321146__lemoncreme__ambient-piano-music-5.ogg", Music.class);
 
 				while (!assetManager.update())
 					;
@@ -247,11 +247,11 @@ public class BlackAndWhiteForest extends Game {
 				click[1] = assetManager.get("sounds/213004__agaxly__clicking-2-edited.mp3", Sound.class);
 				click[2] = assetManager.get("sounds/219068__annabloom__click2-edited.mp3", Sound.class);
 				click[3] = assetManager.get("sounds/256116__kwahmah-02__click-edited.mp3", Sound.class);
-				bgm[0] = assetManager.get("sounds/320506__lemoncreme__ambient-piano-music-1.mp3", Music.class);
-				bgm[1] = assetManager.get("sounds/320525__lemoncreme__ambient-piano-music-2.mp3", Music.class);
-				bgm[2] = assetManager.get("sounds/320526__lemoncreme__ambient-piano-music-3.mp3", Music.class);
-				bgm[3] = assetManager.get("sounds/320603__lemoncreme__ambient-piano-music-4.mp3", Music.class);
-				bgm[4] = assetManager.get("sounds/321146__lemoncreme__ambient-piano-music-5.mp3", Music.class);
+				bgm[0] = assetManager.get("sounds/320506__lemoncreme__ambient-piano-music-1.ogg", Music.class);
+				bgm[1] = assetManager.get("sounds/320525__lemoncreme__ambient-piano-music-2.ogg", Music.class);
+				bgm[2] = assetManager.get("sounds/320526__lemoncreme__ambient-piano-music-3.ogg", Music.class);
+				bgm[3] = assetManager.get("sounds/320603__lemoncreme__ambient-piano-music-4.ogg", Music.class);
+				bgm[4] = assetManager.get("sounds/321146__lemoncreme__ambient-piano-music-5.ogg", Music.class);
 
 				batch = new SpriteBatch();
 				camera = new OrthographicCamera(width, height);
