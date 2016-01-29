@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenCentral()
+        maven { url "http://maven.oschina.net/content/groups/public/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
     }
@@ -17,8 +17,8 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = 'BlackAndWhiteForest'
-        gdxVersion = '1.8.0'
+        appName = "BlackAndWhiteForest"
+        gdxVersion = '1.9.1'
         roboVMVersion = '1.12.0'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
@@ -26,7 +26,7 @@ allprojects {
     }
 
     repositories {
-        mavenCentral()
+        maven { url "http://maven.oschina.net/content/groups/public/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
@@ -40,7 +40,6 @@ project(":desktop") {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     }
 }
 
@@ -54,28 +53,17 @@ project(":android") {
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-    }
-}
-
-project(":html") {
-    apply plugin: "gwt"
-    apply plugin: "war"
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
     }
 }
 
 project(":ios") {
     apply plugin: "java"
     apply plugin: "robovm"
+
+
     dependencies {
         compile project(":core")
         compile "org.robovm:robovm-rt:$roboVMVersion"
@@ -85,19 +73,27 @@ project(":ios") {
     }
 }
 
+project(":html") {
+    apply plugin: "gwt"
+    apply plugin: "war"
+
+
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+    }
+}
+
 project(":core") {
     apply plugin: "java"
 
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 		compile fileTree(dir: 'libs', include: '*.jar')
     }
-}
-
-tasks.eclipse.doLast {
-    delete ".project"
 }
 
 task buildAll(type: Copy, dependsOn: ['android:assembleRelease', 'desktop:dist', 'html:dist']) {
@@ -115,4 +111,8 @@ task buildAll(type: Copy, dependsOn: ['android:assembleRelease', 'desktop:dist',
 
   into('lastest')
  }
+}
+
+tasks.eclipse.doLast {
+    delete ".project"
 }
